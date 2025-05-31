@@ -1373,34 +1373,24 @@
         // Generic function to update user data on the backend
 
         async function updateUserDataOnBackend(email, conversations) {
-
-            try {
-
-                const response = await fetch(`${backendUrl}/user/${encodeURIComponent(email)}`, {
-
-                    method: 'PUT',
-
-                    headers: { 'Content-Type': 'application/json' },
-
-                    body: JSON.stringify({ conversations: conversations }) // Send only what has changed
-
-                });
-
-                if (!response.ok) {
-
-                    const errorData = await response.json();
-
-                    console.error('Error updating user data:', errorData.error);
-
-                }
-
-            } catch (error) {
-
-                console.error('Network error updating user data:', error);
-
-            }
-
-        }
+            try {
+                const response = await fetch(`${backendUrl}/user/${encodeURIComponent(email)}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    // Send the entire updated conversations array
+                    body: JSON.stringify({ conversations: conversations })
+                });
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    console.error('Error updating user data:', errorData.error);
+                    // Optionally show a message box for persistent errors
+                    // showMessageBox(`Erreur lors de la sauvegarde des données: ${errorData.error}`, 'error');
+                }
+            } catch (error) {
+                console.error('Network error updating user data:', error);
+                // showMessageBox('Erreur réseau lors de la sauvegarde des données.', 'error');
+            }
+        }
 
 
 
