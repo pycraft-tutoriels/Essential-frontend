@@ -1,1858 +1,952 @@
 <!DOCTYPE html>
-
 <html lang="fr">
-
 <head>
-
-    <meta charset="UTF-8">
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Essential - Simplifie tes conversations</title>
-
-    <script src="https://cdn.tailwindcss.com"></script>
-
-    <style>
-
-        /* Styles pour la boîte de message personnalisée */
-
-        .message-box-overlay {
-
-            position: fixed;
-
-            top: 0;
-
-            left: 0;
-
-            width: 100%;
-
-            height: 100%;
-
-            background-color: rgba(0, 0, 0, 0.5);
-
-            display: flex;
-
-            justify-content: center;
-
-            align-items: center;
-
-            z-index: 1000;
-
-        }
-
-        .message-box {
-
-            background-color: white;
-
-            padding: 2rem;
-
-            border-radius: 0.75rem; /* rounded-xl */
-
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); /* shadow-2xl */
-
-            text-align: center;
-
-            color: #4c1d95; /* purple-800 */
-
-            max-width: 90%;
-
-            width: 400px;
-
-        }
-
-        .message-box button {
-
-            background-color: #facc15; /* yellow-400 */
-
-            color: #4c1d95; /* purple-800 */
-
-            font-weight: bold;
-
-            padding: 0.75rem 1.5rem;
-
-            border-radius: 9999px; /* rounded-full */
-
-            margin-top: 1rem;
-
-            transition: all 0.3s ease-in-out;
-
-        }
-
-        .message-box button:hover {
-
-            background-color: #fde047; /* yellow-300 */
-
-            transform: scale(1.05);
-
-        }
-
-        /* Styles pour masquer/afficher les sections */
-
-        .hidden {
-
-            display: none !important;
-
-        }
-
-    </style>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Essential - Simplifie tes conversations</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Styles pour la boîte de message personnalisée */
+        .message-box-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .message-box {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 0.75rem; /* rounded-xl */
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); /* shadow-2xl */
+            text-align: center;
+            color: #4c1d95; /* purple-800 */
+            max-width: 90%;
+            width: 400px;
+        }
+        .message-box button {
+            background-color: #facc15; /* yellow-400 */
+            color: #4c1d95; /* purple-800 */
+            font-weight: bold;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px; /* rounded-full */
+            margin-top: 1rem;
+            transition: all 0.3s ease-in-out;
+        }
+        .message-box button:hover {
+            background-color: #fde047; /* yellow-300 */
+            transform: scale(1.05);
+        }
+        /* Styles pour masquer/afficher les sections */
+        .hidden {
+            display: none !important;
+        }
+    </style>
 </head>
-
 <body>
+    <div class="min-h-screen bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center p-4 font-sans text-white">
+
+        <div id="landing-page" class="bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg rounded-3xl shadow-2xl w-full max-w-lg p-8 text-center border border-white border-opacity-20 transform transition-all duration-300 hover:scale-105">
+            <h1 class="text-4xl md:text-5xl font-extrabold mb-4 leading-tight">
+                Bienvenue sur <span class="text-yellow-300">Essential</span> !
+            </h1>
+            <p class="text-lg md:text-xl mb-8 opacity-90">
+                Simplifie tes conversations, concentre-toi sur l'essentiel.
+            </p>
+
+            <div class="space-y-6 mb-10">
+                <div class="flex items-center justify-center bg-white bg-opacity-15 rounded-xl p-4 shadow-inner">
+                    <span class="text-4xl mr-4">⏳</span>
+                    <p class="text-lg font-semibold text-left">
+                        Crée des groupes qui disparaissent après l'événement.
+                        <br>
+                        <span class="text-sm opacity-80">Fini le désordre !</span>
+                    </p>
+                </div>
+
+                <div class="flex items-center justify-center bg-white bg-opacity-15 rounded-xl p-4 shadow-inner">
+                    <span class="text-4xl mr-4">⭐</span>
+                    <p class="text-lg font-semibold text-left">
+                        Marque les messages importants pour ne rien manquer.
+                        <br>
+                        <span class="text-sm opacity-80">L'essentiel en un clin d'œil.</span>
+                    </p>
+                </div>
+            </div>
+
+            <button
+                id="start-adventure-button"
+                class="bg-yellow-400 text-purple-800 font-bold py-4 px-8 rounded-full text-xl shadow-lg hover:bg-yellow-300 transform hover:scale-105 transition duration-300 ease-in-out focus:outline-none focus:ring-4 focus:ring-yellow-300 focus:ring-opacity-75"
+            >
+                Commencer l'aventure !
+            </button>
+
+            <p class="mt-8 text-sm opacity-70">
+                Une communication plus claire, plus simple, plus toi.
+            </p>
+        </div>
+
+        <div id="auth-page" class="hidden bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg rounded-3xl shadow-2xl w-full max-w-md p-8 text-center border border-white border-opacity-20 transform transition-all duration-300 hover:scale-105">
+            <h1 id="auth-title" class="text-4xl md:text-5xl font-extrabold mb-6 leading-tight">
+                Connexion
+            </h1>
+
+            <div id="auth-message" class="hidden mb-4"></div>
+
+            <form id="auth-form" class="space-y-6">
+                <input
+                    type="email"
+                    id="email-input"
+                    placeholder="Adresse Email"
+                    class="w-full p-4 rounded-xl bg-white bg-opacity-20 border border-white border-opacity-30 text-white placeholder-white placeholder-opacity-70 focus:outline-none focus:ring-2 focus:ring-yellow-300 transition duration-200"
+                    required
+                />
+
+                <input
+                    type="password"
+                    id="password-input"
+                    placeholder="Mot de passe"
+                    class="w-full p-4 rounded-xl bg-white bg-opacity-20 border border-white border-opacity-30 text-white placeholder-white placeholder-opacity-70 focus:outline-none focus:ring-2 focus:ring-yellow-300 transition duration-200"
+                    required
+                />
+
+                <button
+                    type="submit"
+                    id="submit-button"
+                    class="w-full bg-yellow-400 text-purple-800 font-bold py-4 px-8 rounded-full text-xl shadow-lg hover:bg-yellow-300 transform hover:scale-105 transition duration-300 ease-in-out focus:outline-none focus:ring-4 focus:ring-yellow-300 focus:ring-opacity-75"
+                >
+                    Se connecter
+                </button>
+            </form>
+
+            <p class="mt-8 text-md opacity-80">
+                <span id="toggle-text">Pas encore de compte ?</span>
+                <button
+                    id="toggle-button"
+                    class="ml-2 font-bold text-yellow-300 hover:text-yellow-200 transition duration-200 focus:outline-none"
+                >
+                    S'inscrire
+                </button>
+            </p>
+        </div>
+
+        <div id="home-page" class="hidden bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg rounded-3xl shadow-2xl w-full max-w-md flex flex-col h-[90vh] overflow-hidden border border-white border-opacity-20">
+            <div class="bg-white bg-opacity-15 p-4 rounded-t-3xl shadow-md flex justify-between items-center">
+                <h1 class="text-2xl font-bold text-white">Essential</h1>
+                <button id="add-new-conversation-button" class="bg-yellow-400 text-purple-800 p-2 rounded-full shadow-md hover:bg-yellow-300 transition-all duration-200 focus:outline-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+                    </svg>
+                </button>
+            </div>
+
+            <div class="flex bg-white bg-opacity-15 p-2 mx-4 mt-4 rounded-xl shadow-inner">
+                <button
+                    id="chats-tab-button"
+                    class="flex-1 py-2 text-center rounded-lg font-semibold transition-colors duration-200"
+                >
+                    Chats
+                </button>
+                <button
+                    id="groups-tab-button"
+                    class="flex-1 py-2 text-center rounded-lg font-semibold transition-colors duration-200"
+                >
+                    Groupes
+                </button>
+            </div>
+
+            <div class="p-4">
+                <input
+                    type="text"
+                    placeholder="Rechercher..."
+                    class="w-full p-3 rounded-xl bg-white bg-opacity-20 border border-white border-opacity-30 text-white placeholder-white placeholder-opacity-70 focus:outline-none focus:ring-2 focus:ring-yellow-300 transition duration-200"
+                />
+            </div>
+
+            <div id="conversation-list" class="flex-1 overflow-y-auto p-4 space-y-3">
+            </div>
+        </div>
+
+        <div id="chat-page" class="hidden bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg rounded-3xl shadow-2xl w-full max-w-md flex flex-col h-[90vh] overflow-hidden border border-white border-opacity-20">
+            <div class="bg-white bg-opacity-15 p-4 rounded-t-3xl shadow-md flex justify-between items-center">
+                <button id="back-to-home-button" class="text-white text-opacity-80 hover:text-white transition-colors duration-200 focus:outline-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+                    </svg>
+                </button>
+                <h1 id="chat-contact-name" class="text-2xl font-bold text-white"></h1> <button class="text-white text-opacity-80 hover:text-white transition-colors duration-200 focus:outline-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+                    </svg>
+                </button>
+            </div>
+
+            <div id="messages-display-area" class="flex-1 p-4 overflow-y-auto space-y-3 bg-white bg-opacity-5">
+                </div>
+            <div id="messages-end-ref"></div> <form id="message-input-form" class="p-4 bg-white bg-opacity-15 border-t border-white border-opacity-20 flex items-center space-x-3">
+                <input
+                    type="text"
+                    id="new-message-input"
+                    placeholder="Écrivez votre message..."
+                    class="flex-1 p-3 border border-white border-opacity-30 rounded-lg bg-white bg-opacity-20 text-white placeholder-white placeholder-opacity-70 focus:outline-none focus:ring-2 focus:ring-yellow-300 transition duration-200"
+                />
+                <button
+                    type="button"
+                    id="priority-toggle-button"
+                    class="p-3 rounded-lg transition-all duration-200 ease-in-out bg-white bg-opacity-20 text-white text-opacity-70 hover:bg-opacity-30"
+                    title="Marquer comme prioritaire"
+                >
+                    ⭐
+                </button>
+                <button
+                    type="submit"
+                    id="send-message-button"
+                    class="bg-yellow-400 text-purple-800 p-3 rounded-lg shadow-md hover:bg-yellow-300 focus:outline-none focus:ring-2 focus:ring-yellow-300 transition duration-200"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
+                </button>
+            </form>
+        </div>
+
+        <div id="new-conversation-page" class="hidden bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg rounded-3xl shadow-2xl w-full max-w-md flex flex-col h-[90vh] overflow-hidden border border-white border-opacity-20">
+            <div class="bg-white bg-opacity-15 p-4 rounded-t-3xl shadow-md flex justify-between items-center">
+                <h1 class="text-2xl font-bold text-white">Nouvelle Conversation</h1>
+                <button id="back-from-new-conversation-button" class="text-white text-opacity-80 hover:text-white transition-colors duration-200 focus:outline-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+
+            <div class="flex bg-white bg-opacity-15 p-2 mx-4 mt-4 rounded-xl shadow-inner">
+                <button id="new-chat-tab-button" class="flex-1 py-2 text-center rounded-lg font-semibold transition-colors duration-200">
+                    Nouveau Chat
+                </button>
+                <button id="new-group-tab-button" class="flex-1 py-2 text-center rounded-lg font-semibold transition-colors duration-200">
+                    Nouveau Groupe
+                </button>
+            </div>
+
+            <div class="flex-1 overflow-y-auto p-4 space-y-6">
+                <form id="create-chat-form" class="space-y-6 bg-white bg-opacity-15 p-6 rounded-2xl shadow-lg">
+                    <p class="text-lg font-semibold text-white mb-4">Démarrer une conversation individuelle</p>
+                    <input
+                        type="text"
+                        id="chat-contact-name-input"
+                        placeholder="Nom du contact (ex: Alice)"
+                        class="w-full p-4 rounded-xl bg-white bg-opacity-20 border border-white border-opacity-30 text-white placeholder-white placeholder-opacity-70 focus:outline-none focus:ring-2 focus:ring-yellow-300 transition duration-200"
+                        required
+                    />
+                    <input
+                        type="text"
+                        id="chat-contact-identifier-input"
+                        placeholder="Numéro de téléphone ou ID du contact"
+                        class="w-full p-4 rounded-xl bg-white bg-opacity-20 border border-white border-opacity-30 text-white placeholder-white placeholder-opacity-70 focus:outline-none focus:ring-2 focus:ring-yellow-300 transition duration-200"
+                        required
+                    />
+                    <button
+                        type="submit"
+                        class="w-full bg-yellow-400 text-purple-800 font-bold py-4 px-8 rounded-full text-xl shadow-lg hover:bg-yellow-300 transform hover:scale-105 transition duration-300 ease-in-out focus:outline-none focus:ring-4 focus:ring-yellow-300 focus:ring-opacity-75"
+                    >
+                        Créer le Chat
+                    </button>
+                </form>
+
+                <form id="create-group-form" class="hidden space-y-6 bg-white bg-opacity-15 p-6 rounded-2xl shadow-lg">
+                    <p class="text-lg font-semibold text-white mb-4">Créer un nouveau groupe</p>
+                    <input
+                        type="text"
+                        id="group-name-input"
+                        placeholder="Nom du groupe (ex: Projet Alpha)"
+                        class="w-full p-4 rounded-xl bg-white bg-opacity-20 border border-white border-opacity-30 text-white placeholder-white placeholder-opacity-70 focus:outline-none focus:ring-2 focus:ring-yellow-300 transition duration-200"
+                        required
+                    />
+                    <textarea
+                        id="group-members-input"
+                        placeholder="Membres du groupe (ex: Bob, Charlie, Diana)"
+                        rows="2"
+                        class="w-full p-4 rounded-xl bg-white bg-opacity-20 border border-white border-opacity-30 text-white placeholder-white placeholder-opacity-70 focus:outline-none focus:ring-2 focus:ring-yellow-300 transition duration-200 resize-y"
+                        required
+                    ></textarea>
+                    <div class="flex items-center bg-white bg-opacity-20 rounded-xl p-4 border border-white border-opacity-30">
+                        <span class="text-white text-opacity-70 mr-3">Date de fin :</span>
+                        <input
+                            type="date"
+                            id="group-end-date-input"
+                            class="flex-1 bg-transparent text-white focus:outline-none"
+                            required
+                        />
+                    </div>
+                    <p class="text-sm opacity-80 text-center">
+                        Ce groupe se supprimera automatiquement après cette date.
+                    </p>
+                    <button
+                        type="submit"
+                        class="w-full bg-yellow-400 text-purple-800 font-bold py-4 px-8 rounded-full text-xl shadow-lg hover:bg-yellow-300 transform hover:scale-105 transition duration-300 ease-in-out focus:outline-none focus:ring-4 focus:ring-yellow-300 focus:ring-opacity-75"
+                    >
+                        Créer le Groupe
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="message-box-container"></div>
 
-    <div class="min-h-screen bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center p-4 font-sans text-white">
-
-
-
-        <div id="landing-page" class="bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg rounded-3xl shadow-2xl w-full max-w-lg p-8 text-center border border-white border-opacity-20 transform transition-all duration-300 hover:scale-105">
-
-            <h1 class="text-4xl md:text-5xl font-extrabold mb-4 leading-tight">
-
-                Bienvenue sur <span class="text-yellow-300">Essential</span> !
-
-            </h1>
-
-            <p class="text-lg md:text-xl mb-8 opacity-90">
-
-                Simplifie tes conversations, concentre-toi sur l'essentiel.
-
-            </p>
-
-
-
-            <div class="space-y-6 mb-10">
-
-                <div class="flex items-center justify-center bg-white bg-opacity-15 rounded-xl p-4 shadow-inner">
-
-                    <span class="text-4xl mr-4">⏳</span>
-
-                    <p class="text-lg font-semibold text-left">
-
-                        Crée des groupes qui disparaissent après l'événement.
-
-                        <br>
-
-                        <span class="text-sm opacity-80">Fini le désordre !</span>
-
-                    </p>
-
-                </div>
-
-
-
-                <div class="flex items-center justify-center bg-white bg-opacity-15 rounded-xl p-4 shadow-inner">
-
-                    <span class="text-4xl mr-4">⭐</span>
-
-                    <p class="text-lg font-semibold text-left">
-
-                        Marque les messages importants pour ne rien manquer.
-
-                        <br>
-
-                        <span class="text-sm opacity-80">L'essentiel en un clin d'œil.</span>
-
-                    </p>
-
-                </div>
-
-            </div>
-
-
-
-            <button
-
-                id="start-adventure-button"
-
-                class="bg-yellow-400 text-purple-800 font-bold py-4 px-8 rounded-full text-xl shadow-lg hover:bg-yellow-300 transform hover:scale-105 transition duration-300 ease-in-out focus:outline-none focus:ring-4 focus:ring-yellow-300 focus:ring-opacity-75"
-
-            >
-
-                Commencer l'aventure !
-
-            </button>
-
-
-
-            <p class="mt-8 text-sm opacity-70">
-
-                Une communication plus claire, plus simple, plus toi.
-
-            </p>
-
-        </div>
-
-
-
-        <div id="auth-page" class="hidden bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg rounded-3xl shadow-2xl w-full max-w-md p-8 text-center border border-white border-opacity-20 transform transition-all duration-300 hover:scale-105">
-
-            <h1 id="auth-title" class="text-4xl md:text-5xl font-extrabold mb-6 leading-tight">
-
-                Connexion
-
-            </h1>
-
-
-
-            <div id="auth-message" class="hidden mb-4"></div>
-
-
-
-            <form id="auth-form" class="space-y-6">
-
-                <input
-
-                    type="email"
-
-                    id="email-input"
-
-                    placeholder="Adresse Email"
-
-                    class="w-full p-4 rounded-xl bg-white bg-opacity-20 border border-white border-opacity-30 text-white placeholder-white placeholder-opacity-70 focus:outline-none focus:ring-2 focus:ring-yellow-300 transition duration-200"
-
-                    required
-
-                />
-
-
-
-                <input
-
-                    type="password"
-
-                    id="password-input"
-
-                    placeholder="Mot de passe"
-
-                    class="w-full p-4 rounded-xl bg-white bg-opacity-20 border border-white border-opacity-30 text-white placeholder-white placeholder-opacity-70 focus:outline-none focus:ring-2 focus:ring-yellow-300 transition duration-200"
-
-                    required
-
-                />
-
-
-
-                <button
-
-                    type="submit"
-
-                    id="submit-button"
-
-                    class="w-full bg-yellow-400 text-purple-800 font-bold py-4 px-8 rounded-full text-xl shadow-lg hover:bg-yellow-300 transform hover:scale-105 transition duration-300 ease-in-out focus:outline-none focus:ring-4 focus:ring-yellow-300 focus:ring-opacity-75"
-
-                >
-
-                    Se connecter
-
-                </button>
-
-            </form>
-
-
-
-            <p class="mt-8 text-md opacity-80">
-
-                <span id="toggle-text">Pas encore de compte ?</span>
-
-                <button
-
-                    id="toggle-button"
-
-                    class="ml-2 font-bold text-yellow-300 hover:text-yellow-200 transition duration-200 focus:outline-none"
-
-                >
-
-                    S'inscrire
-
-                </button>
-
-            </p>
-
-        </div>
-
-
-
-        <div id="home-page" class="hidden bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg rounded-3xl shadow-2xl w-full max-w-md flex flex-col h-[90vh] overflow-hidden border border-white border-opacity-20">
-
-            <div class="bg-white bg-opacity-15 p-4 rounded-t-3xl shadow-md flex justify-between items-center">
-
-                <h1 class="text-2xl font-bold text-white">Essential</h1>
-
-                <button id="add-new-conversation-button" class="bg-yellow-400 text-purple-800 p-2 rounded-full shadow-md hover:bg-yellow-300 transition-all duration-200 focus:outline-none">
-
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
-
-                    </svg>
-
-                </button>
-
-            </div>
-
-
-
-            <div class="flex bg-white bg-opacity-15 p-2 mx-4 mt-4 rounded-xl shadow-inner">
-
-                <button
-
-                    id="chats-tab-button"
-
-                    class="flex-1 py-2 text-center rounded-lg font-semibold transition-colors duration-200"
-
-                >
-
-                    Chats
-
-                </button>
-
-                <button
-
-                    id="groups-tab-button"
-
-                    class="flex-1 py-2 text-center rounded-lg font-semibold transition-colors duration-200"
-
-                >
-
-                    Groupes
-
-                </button>
-
-            </div>
-
-
-
-            <div class="p-4">
-
-                <input
-
-                    type="text"
-
-                    placeholder="Rechercher..."
-
-                    class="w-full p-3 rounded-xl bg-white bg-opacity-20 border border-white border-opacity-30 text-white placeholder-white placeholder-opacity-70 focus:outline-none focus:ring-2 focus:ring-yellow-300 transition duration-200"
-
-                />
-
-            </div>
-
-
-
-            <div id="conversation-list" class="flex-1 overflow-y-auto p-4 space-y-3">
-
-            </div>
-
-        </div>
-
-
-
-        <div id="chat-page" class="hidden bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg rounded-3xl shadow-2xl w-full max-w-md flex flex-col h-[90vh] overflow-hidden border border-white border-opacity-20">
-
-            <div class="bg-white bg-opacity-15 p-4 rounded-t-3xl shadow-md flex justify-between items-center">
-
-                <button id="back-to-home-button" class="text-white text-opacity-80 hover:text-white transition-colors duration-200 focus:outline-none">
-
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
-
-                    </svg>
-
-                </button>
-
-                <h1 id="chat-contact-name" class="text-2xl font-bold text-white"></h1> <button class="text-white text-opacity-80 hover:text-white transition-colors duration-200 focus:outline-none">
-
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
-
-                    </svg>
-
-                </button>
-
-            </div>
-
-
-
-            <div id="messages-display-area" class="flex-1 p-4 overflow-y-auto space-y-3 bg-white bg-opacity-5">
-
-                </div>
-
-            <div id="messages-end-ref"></div> <form id="message-input-form" class="p-4 bg-white bg-opacity-15 border-t border-white border-opacity-20 flex items-center space-x-3">
-
-                <input
-
-                    type="text"
-
-                    id="new-message-input"
-
-                    placeholder="Écrivez votre message..."
-
-                    class="flex-1 p-3 border border-white border-opacity-30 rounded-lg bg-white bg-opacity-20 text-white placeholder-white placeholder-opacity-70 focus:outline-none focus:ring-2 focus:ring-yellow-300 transition duration-200"
-
-                />
-
-                <button
-
-                    type="button"
-
-                    id="priority-toggle-button"
-
-                    class="p-3 rounded-lg transition-all duration-200 ease-in-out bg-white bg-opacity-20 text-white text-opacity-70 hover:bg-opacity-30"
-
-                    title="Marquer comme prioritaire"
-
-                >
-
-                    ⭐
-
-                </button>
-
-                <button
-
-                    type="submit"
-
-                    id="send-message-button"
-
-                    class="bg-yellow-400 text-purple-800 p-3 rounded-lg shadow-md hover:bg-yellow-300 focus:outline-none focus:ring-2 focus:ring-yellow-300 transition duration-200"
-
-                >
-
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-
-                    </svg>
-
-                </button>
-
-            </form>
-
-        </div>
-
-
-
-        <div id="new-conversation-page" class="hidden bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg rounded-3xl shadow-2xl w-full max-w-md flex flex-col h-[90vh] overflow-hidden border border-white border-opacity-20">
-
-            <div class="bg-white bg-opacity-15 p-4 rounded-t-3xl shadow-md flex justify-between items-center">
-
-                <h1 class="text-2xl font-bold text-white">Nouvelle Conversation</h1>
-
-                <button id="back-from-new-conversation-button" class="text-white text-opacity-80 hover:text-white transition-colors duration-200 focus:outline-none">
-
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-
-                    </svg>
-
-                </button>
-
-            </div>
-
-
-
-            <div class="flex bg-white bg-opacity-15 p-2 mx-4 mt-4 rounded-xl shadow-inner">
-
-                <button id="new-chat-tab-button" class="flex-1 py-2 text-center rounded-lg font-semibold transition-colors duration-200">
-
-                    Nouveau Chat
-
-                </button>
-
-                <button id="new-group-tab-button" class="flex-1 py-2 text-center rounded-lg font-semibold transition-colors duration-200">
-
-                    Nouveau Groupe
-
-                </button>
-
-            </div>
-
-
-
-            <div class="flex-1 overflow-y-auto p-4 space-y-6">
-
-                <form id="create-chat-form" class="space-y-6 bg-white bg-opacity-15 p-6 rounded-2xl shadow-lg">
-
-                    <p class="text-lg font-semibold text-white mb-4">Démarrer une conversation individuelle</p>
-
-                    <input
-
-                        type="text"
-
-                        id="chat-contact-name-input"
-
-                        placeholder="Email du contact"
-
-                        class="w-full p-4 rounded-xl bg-white bg-opacity-20 border border-white border-opacity-30 text-white placeholder-white placeholder-opacity-70 focus:outline-none focus:ring-2 focus:ring-yellow-300 transition duration-200"
-
-                        required
-
-                    />
-
-                    <input
-
-                        type="email"
-
-                        id="chat-contact-identifier-input"
-
-                        placeholder="Numéro de téléphone ou ID du contact"
-
-                        class="w-full p-4 rounded-xl bg-white bg-opacity-20 border border-white border-opacity-30 text-white placeholder-white placeholder-opacity-70 focus:outline-none focus:ring-2 focus:ring-yellow-300 transition duration-200"
-
-                        required
-
-                    />
-
-                    <button
-
-                        type="submit"
-
-                        class="w-full bg-yellow-400 text-purple-800 font-bold py-4 px-8 rounded-full text-xl shadow-lg hover:bg-yellow-300 transform hover:scale-105 transition duration-300 ease-in-out focus:outline-none focus:ring-4 focus:ring-yellow-300 focus:ring-opacity-75"
-
-                    >
-
-                        Créer le Chat
-
-                    </button>
-
-                </form>
-
-
-
-                <form id="create-group-form" class="hidden space-y-6 bg-white bg-opacity-15 p-6 rounded-2xl shadow-lg">
-
-                    <p class="text-lg font-semibold text-white mb-4">Créer un nouveau groupe</p>
-
-                    <input
-
-                        type="text"
-
-                        id="group-name-input"
-
-                        placeholder="Nom du groupe (ex: Projet Alpha)"
-
-                        class="w-full p-4 rounded-xl bg-white bg-opacity-20 border border-white border-opacity-30 text-white placeholder-white placeholder-opacity-70 focus:outline-none focus:ring-2 focus:ring-yellow-300 transition duration-200"
-
-                        required
-
-                    />
-
-                    <textarea
-
-                        id="group-members-input"
-
-                        placeholder="Membres du groupe (ex: Bob, Charlie, Diana)"
-
-                        rows="2"
-
-                        class="w-full p-4 rounded-xl bg-white bg-opacity-20 border border-white border-opacity-30 text-white placeholder-white placeholder-opacity-70 focus:outline-none focus:ring-2 focus:ring-yellow-300 transition duration-200 resize-y"
-
-                        required
-
-                    ></textarea>
-
-                    <div class="flex items-center bg-white bg-opacity-20 rounded-xl p-4 border border-white border-opacity-30">
-
-                        <span class="text-white text-opacity-70 mr-3">Date de fin :</span>
-
-                        <input
-
-                            type="date"
-
-                            id="group-end-date-input"
-
-                            class="flex-1 bg-transparent text-white focus:outline-none"
-
-                            required
-
-                        />
-
-                    </div>
-
-                    <p class="text-sm opacity-80 text-center">
-
-                        Ce groupe se supprimera automatiquement après cette date.
-
-                    </p>
-
-                    <button
-
-                        type="submit"
-
-                        class="w-full bg-yellow-400 text-purple-800 font-bold py-4 px-8 rounded-full text-xl shadow-lg hover:bg-yellow-300 transform hover:scale-105 transition duration-300 ease-in-out focus:outline-none focus:ring-4 focus:ring-yellow-300 focus:ring-opacity-75"
-
-                    >
-
-                        Créer le Groupe
-
-                    </button>
-
-                </form>
-
-            </div>
-
-        </div>
-
-    </div>
-
-
-
-    <div id="message-box-container"></div>
     <script>
-
-        // References to DOM elements
-
-        const landingPage = document.getElementById('landing-page');
-
-        const authPage = document.getElementById('auth-page');
-
-        const homePage = document.getElementById('home-page');
-
-        const chatPage = document.getElementById('chat-page');
-
-        const newConversationPage = document.getElementById('new-conversation-page');
-
-        const startAdventureButton = document.getElementById('start-adventure-button');
-
-
-
-        const authTitle = document.getElementById('auth-title');
-
-        const emailInput = document.getElementById('email-input');
-
-        const passwordInput = document.getElementById('password-input');
-
-        const submitButton = document.getElementById('submit-button');
-
-        const toggleText = document.getElementById('toggle-text');
-
-        const toggleButton = document.getElementById('toggle-button');
-
-        const authForm = document.getElementById('auth-form');
-
-        const messageBoxContainer = document.getElementById('message-box-container');
-
-        const authMessage = document.getElementById('auth-message'); // Ensure this ID exists in your HTML
-
-
-
-        // HomePage elements
-
-        const chatsTabButton = document.getElementById('chats-tab-button');
-
-        const groupsTabButton = document.getElementById('groups-tab-button');
-
-        const conversationListContainer = document.getElementById('conversation-list');
-
-        const addNewConversationButton = document.getElementById('add-new-conversation-button');
-
-
-
-        // ChatConversationPage elements
-
-        const chatContactName = document.getElementById('chat-contact-name');
-
-        const messagesDisplayArea = document.getElementById('messages-display-area');
-
-        const newMessageInput = document.getElementById('new-message-input');
-
-        const priorityToggleButton = document.getElementById('priority-toggle-button');
-
-        const sendMessageButton = document.getElementById('send-message-button');
-
-        const messageInputForm = document.getElementById('message-input-form');
-
-        const messagesEndRef = document.getElementById('messages-end-ref');
-
-        const backToHomeButton = document.getElementById('back-to-home-button');
-
-
-
-        // NewConversationPage elements
-
-        const newChatTabButton = document.getElementById('new-chat-tab-button');
-
-        const newGroupTabButton = document.getElementById('new-group-tab-button');
-
-        const createChatForm = document.getElementById('create-chat-form');
-
-        const createGroupForm = document.getElementById('create-group-form');
-
-        const chatContactNameInput = document.getElementById('chat-contact-name-input');
-
-        const chatContactIdentifierInput = document.getElementById('chat-contact-identifier-input');
-
-        const groupNameInput = document.getElementById('group-name-input');
-
-        const groupMembersInput = document.getElementById('group-members-input');
-
-        const groupEndDateInput = document.getElementById('group-end-date-input');
-
-        const backFromNewConversationButton = document.getElementById('back-from-new-conversation-button');
-
-
-
-        // Global state variables
-
-        let currentPage = 'landing'; // 'landing', 'auth', 'home', 'chat', or 'new-conversation'
-
-        let isRegisterMode = false; // true for registration, false for login
-
-        let activeTab = 'chats'; // 'chats' or 'groups' for HomePage
-
-        let activeForm = 'chat'; // 'chat' or 'group' for NewConversationPage
-
-        let isPriority = false; // Priority status for messages
-
-
-
-        // User and conversation data, now managed by the backend
-
-        // These will be populated after a successful login
-
-        window.currentUserData = null; // Will contain { email, contacts, conversations, groups }
-
-        window.currentChatId = null; // ID of the currently open conversation
-
-        let currentChatContactName = ''; // Name of the contact in the current conversation
-
-
-
-        // Starred conversations state (initialized empty, updated dynamically)
-
-        let starredConversations = new Set();
-
-
-
-
-
-        const backendUrl = 'https://essential-9ouy.onrender.com';
-
-
-
-        // --- Utility functions ---
-
-
-
-        // Function to display a custom message box (replaces alert())
-
-        function showMessageBox(message, type = 'info') {
-
-            const overlay = document.createElement('div');
-
-            overlay.className = 'message-box-overlay'; // Keep the overlay style if you have one
-
-            overlay.innerHTML = `
-
-                <div class="message-box ${type === 'success' ? 'message-success' : 'message-error'}">
-
-                    <p class="text-lg font-semibold">${message}</p>
-
-                    <button onclick="this.closest('.message-box-overlay').remove()">OK</button>
-
-                </div>
-
-            `;
-
-            // Ensure messageBoxContainer exists and is visible
-
-            if (messageBoxContainer) {
-
-                messageBoxContainer.appendChild(overlay);
-
-            } else {
-
-                console.error("messageBoxContainer not found in DOM.");
-
-                alert(message); // Fallback if container is not ready
-
-            }
-
-        }
-
-
-
-
-
-        // Function to display authentication messages (for login/registration errors or successes)
-
-        function showAuthMessage(message, type = 'info') {
-
-            authMessage.textContent = message;
-
-            authMessage.className = `message-box ${type === 'success' ? 'message-success' : 'message-error'} block`;
-
-            authMessage.classList.remove('hidden');
-
-        }
-
-
-
-        // Function to hide authentication messages
-
-        function hideAuthMessage() {
-
-            authMessage.classList.add('hidden');
-
-            authMessage.textContent = '';
-
-        }
-
-
-
-        // Function to update the authentication UI (title, button text)
-
-        function updateAuthUI() {
-
-            authTitle.textContent = isRegisterMode ? 'Inscription' : 'Connexion';
-
-            submitButton.textContent = isRegisterMode ? "S'inscrire" : "Se connecter";
-
-            toggleText.textContent = isRegisterMode ? "Déjà un compte ?" : "Pas encore de compte ?";
-
-            toggleButton.textContent = isRegisterMode ? "Se connecter" : "S'inscrire";
-
-        }
-
-
-
-        // Function to switch between application pages
-
-        function navigateTo(page, chatId = null, chatName = null) {
-
-            currentPage = page;
-
-            // Hide all pages
-
-            landingPage.classList.add('hidden');
-
-            authPage.classList.add('hidden');
-
-            homePage.classList.add('hidden');
-
-            chatPage.classList.add('hidden');
-
-            newConversationPage.classList.add('hidden');
-
-
-
-            // Display the desired page and update its UI if necessary
-
-            if (currentPage === 'landing') {
-
-                landingPage.classList.remove('hidden');
-
-            } else if (currentPage === 'auth') {
-
-                authPage.classList.remove('hidden');
-
-                updateAuthUI();
-
-            } else if (currentPage === 'home') {
-
-                homePage.classList.remove('hidden');
-
-                if (window.currentUserData) { // Ensure user data is loaded
-
-                    updateHomeUI(); // Update the conversation list
-
-                } else {
-
-                    // If no user data (e.g., refresh without session), redirect to authentication
-
-                    console.warn("No user data, redirecting to authentication.");
-
-                    navigateTo('auth');
-
-                }
-
-            } else if (currentPage === 'chat') {
-
-                chatPage.classList.remove('hidden');
-
-                window.currentChatId = chatId; // Set the ID of the current conversation
-
-                currentChatContactName = chatName || 'Contact';
-
-                chatContactName.textContent = currentChatContactName;
-
-                renderMessages(); // Display messages for this conversation
-
-            } else if (currentPage === 'new-conversation') {
-
-                newConversationPage.classList.remove('hidden');
-
-                updateNewConversationUI();
-
-            }
-
-        }
-
-
-
-        // Function to update the HomePage UI (tabs and conversation list)
-
-        function updateHomeUI() {
-
-            // Update tab styles
-
-            if (activeTab === 'chats') {
-
-                chatsTabButton.classList.add('bg-yellow-400', 'text-purple-800', 'shadow-md');
-
-                chatsTabButton.classList.remove('text-white', 'text-opacity-80', 'hover:bg-white', 'hover:bg-opacity-10');
-
-                groupsTabButton.classList.remove('bg-yellow-400', 'text-purple-800', 'shadow-md');
-
-                groupsTabButton.classList.add('text-white', 'text-opacity-80', 'hover:bg-white', 'hover:bg-opacity-10');
-
-            } else {
-
-                groupsTabButton.classList.add('bg-yellow-400', 'text-purple-800', 'shadow-md');
-
-                groupsTabButton.classList.remove('text-white', 'text-opacity-80', 'hover:bg-white', 'hover:bg-opacity-10');
-
-                chatsTabButton.classList.remove('bg-yellow-400', 'text-purple-800', 'shadow-md');
-
-                chatsTabButton.classList.add('text-white', 'text-opacity-80', 'hover:bg-white', 'hover:bg-opacity-10');
-
-            }
-
-
-
-            // Retrieve conversations from the logged-in user
-
-            const allConversations = window.currentUserData.conversations || [];
-
-
-
-            // Update starred status and sort conversations
-
-            const displayConversations = allConversations.map(conv => ({
-
-                ...conv,
-
-                isStarred: starredConversations.has(conv.id) || conv.isPriority // Also consider initial priority from backend
-
-            })).sort((a, b) => {
-
-                if (a.isStarred && !b.isStarred) return -1;
-
-                if (!a.isStarred && b.isStarred) return 1;
-
-                // Simple sort by time (needs improvement for actual dates/times)
-
-                // For a more robust sort by hour/date, a real timestamp property would be needed
-
-                return 0; // Maintain original order if priority is the same
-
-            });
-
-
-
-            const filteredConversations = displayConversations.filter(conv =>
-
-                (activeTab === 'chats' && !conv.isGroup) || (activeTab === 'groups' && conv.isGroup)
-
-            );
-
-
-
-            // Clear the current list
-
-            conversationListContainer.innerHTML = '';
-
-
-
-            // Render new conversations
-
-            if (filteredConversations.length === 0) {
-
-                const noConvDiv = document.createElement('div');
-
-                noConvDiv.className = 'text-center text-white text-opacity-70 mt-10';
-
-                noConvDiv.textContent = `Aucune ${activeTab === 'chats' ? 'conversation' : 'groupe'} pour le moment. Créez-en une !`;
-
-                conversationListContainer.appendChild(noConvDiv);
-
-            } else {
-
-                filteredConversations.forEach(conv => {
-
-                    const conversationDiv = document.createElement('div');
-
-                    conversationDiv.className = `flex items-center p-3 rounded-xl cursor-pointer transition-all duration-200 ease-in-out
-
-                        ${conv.isStarred ? 'bg-yellow-400 bg-opacity-20 ring-2 ring-yellow-300' : 'bg-white bg-opacity-10 hover:bg-opacity-20'}
-
-                        shadow-sm mb-3
-
-                    `;
-
-                    // Add event listener to navigate to chat page
-
-                    conversationDiv.addEventListener('click', () => {
-
-                        navigateTo('chat', conv.id, conv.name);
-
-                    });
-
-
-
-                    conversationDiv.innerHTML = `
-
-                        <div class="w-12 h-12 bg-purple-700 rounded-full flex items-center justify-center text-xl font-bold mr-4 flex-shrink-0">
-
-                            ${conv.name.charAt(0)}
-
-                        </div>
-
-                        <div class="flex-1 overflow-hidden">
-
-                            <div class="flex justify-between items-center">
-
-                                <h3 class="font-semibold text-lg truncate text-white">
-
-                                    ${conv.name}
-
-                                </h3>
-
-                                <span class="text-sm opacity-70 ml-2 flex-shrink-0">
-
-                                    ${conv.time}
-
-                                </span>
-
-                            </div>
-
-                            <p class="text-sm opacity-80 truncate">
-
-                                ${conv.lastMessage || 'Pas de message récent'}
-
-                            </p>
-
-                        </div>
-
-                        <button
-
-                            data-id="${conv.id}"
-
-                            class="star-button ml-4 p-1 rounded-full hover:bg-white hover:bg-opacity-20 transition-colors duration-150 focus:outline-none"
-
-                            title="${conv.isStarred ? 'Désactiver la priorité' : 'Activer la priorité'}"
-
-                        >
-
-                            <span class="text-2xl ${conv.isStarred ? 'text-yellow-300' : 'text-gray-400'}">
-
-                                ${conv.isStarred ? '⭐' : '☆'}
-
-                            </span>
-
-                        </button>
-
-                        ${conv.isGroup && conv.timer ? `
-
-                            <span class="text-sm bg-purple-700 text-white px-2 py-1 rounded-full ml-2 flex-shrink-0">
-
-                                ${conv.timer}
-
-                            </span>
-
-                        ` : ''}
-
-                    `;
-
-                    conversationListContainer.appendChild(conversationDiv);
-
-                });
-
-
-
-                // Attach event listeners to new star buttons
-
-                conversationListContainer.querySelectorAll('.star-button').forEach(button => {
-
-                    button.addEventListener('click', (e) => {
-
-                        e.stopPropagation(); // Prevent parent div click
-
-                        const id = button.dataset.id;
-
-                        toggleStar(id);
-
-                    });
-
-                });
-
-            }
-
-        }
-
-
-
-        // Function to toggle the star status of a conversation
-
-        function toggleStar(id) {
-
-            if (starredConversations.has(id)) {
-
-                starredConversations.delete(id);
-
-            } else {
-
-                starredConversations.add(id);
-
-            }
-
-            updateHomeUI(); // Re-render the list to reflect the change
-
-        }
-
-
-
-        // Functions for ChatConversationPage
-
-        function scrollToBottom() {
-
-            messagesEndRef.scrollIntoView({ behavior: "smooth" });
-
-        }
-
-
-
-        function renderMessages() {
-
-            messagesDisplayArea.innerHTML = ''; // Clear existing messages
-
-
-
-            // Find the current conversation in user data
-
-            const currentConversation = window.currentUserData.conversations.find(conv => conv.id === window.currentChatId);
-
-
-
-            if (!currentConversation || currentConversation.messages.length === 0) {
-
-                const noMessageDiv = document.createElement('div');
-
-                noMessageDiv.className = 'text-center text-white text-opacity-70 mt-10';
-
-                noMessageDiv.textContent = `Commencez à discuter avec ${currentChatContactName} !`;
-
-                messagesDisplayArea.appendChild(noMessageDiv);
-
-            } else {
-
-                // Copy messages to allow sorting without modifying the original
-
-                const messagesToDisplay = [...currentConversation.messages];
-
-
-
-                messagesToDisplay.forEach(msg => {
-
-                    const messageDiv = document.createElement('div');
-
-                    messageDiv.className = `flex ${msg.sender === 'Moi' ? 'justify-end' : 'justify-start'} mb-3`;
-
-                    messageDiv.innerHTML = `
-
-                        <div
-
-                            data-id="${msg.id}"
-
-                            class="relative p-3 rounded-lg shadow-sm max-w-[75%] cursor-pointer transition-all duration-200 ease-in-out
-
-                                ${msg.sender === 'Moi'
-
-                                    ? 'bg-purple-600 text-white rounded-br-none'
-
-                                    : 'bg-white bg-opacity-20 text-white rounded-bl-none'
-
-                                }
-
-                                ${msg.isPriority ? 'ring-2 ring-yellow-400 transform scale-105' : ''}
-
-                            "
-
-                        >
-
-                            <p class="text-sm leading-snug">${msg.text}</p>
-
-                            <div class="text-xs text-right mt-1 opacity-75">
-
-                                ${msg.isPriority ? `<span class="inline-block mr-1 text-yellow-300">⭐</span>` : ''}
-
-                                ${msg.timestamp}
-
-                            </div>
-
-                        </div>
-
-                    `;
-
-                    messagesDisplayArea.appendChild(messageDiv);
-
-
-
-                    // Attach event listener to toggle priority
-
-                    messageDiv.querySelector('.relative').addEventListener('click', (e) => {
-
-                        toggleMessagePriority(window.currentChatId, msg.id);
-
-                    });
-
-                });
-
-            }
-
-            scrollToBottom();
-
-        }
-      function handleSendMessage(e) {
-
-            e.preventDefault();
-
-            const text = newMessageInput.value.trim();
-
-            if (text && window.currentChatId) {
-
-                const newMsg = {
-
-                    id: Date.now(), // Unique ID for the message
-
-                    text: text,
-
-                    sender: 'Moi', // Message sent by current user
-
-                    isPriority: isPriority,
-
-                    timestamp: new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })
-
-                };
-
-
-
-                // Find the current conversation and add the message
-
-                const currentConversation = window.currentUserData.conversations.find(conv => conv.id === window.currentChatId);
-
-                if (currentConversation) {
-
-                    if (!currentConversation.messages) {
-
-                        currentConversation.messages = []; // Ensure messages array exists
-
-                    }
-
-                    currentConversation.messages.push(newMsg);
-
-                    currentConversation.lastMessage = newMsg.text; // Update last message
-
-                    currentConversation.time = newMsg.timestamp; // Update last message time
-
-
-
-                    // **** IMPORTANT: Send this update to the backend ****
-
-                    // This is a crucial step to persist messages and last activity.
-
-                    // For now, I will leave this part as a TODO,
-
-                    // as it would require a new PUT route on the backend to
-
-                    // update a specific conversation with its messages.
-
-                    // For example: fetch(`${backendUrl}/conversations/${window.currentChatId}`, { method: 'PUT', body: JSON.stringify(currentConversation) });
-
-                    // For now, messages will not be persisted after a refresh.
-
-                    updateUserDataOnBackend(window.currentUserData.email, window.currentUserData.conversations);
-
-
-
-                } else {
-
-                    console.error("Current conversation not found for message addition.");
-
-                    return;
-
-                }
-
-
-
-                newMessageInput.value = ''; // Clear input
-
-                isPriority = false; // Reset priority button
-
-                priorityToggleButton.classList.remove('bg-yellow-400', 'text-purple-800', 'shadow-md');
-
-                priorityToggleButton.classList.add('bg-white', 'bg-opacity-20', 'text-white', 'text-opacity-70', 'hover:bg-opacity-30');
-
-                renderMessages(); // Re-render messages
-
-                updateHomeUI(); // Update conversation list (for lastMessage/time)
-
-            }
-
-        }
-
-
-
-        function toggleMessagePriority(chatId, messageId) {
-
-            const currentConversation = window.currentUserData.conversations.find(conv => conv.id === chatId);
-
-            if (currentConversation) {
-
-                currentConversation.messages = currentConversation.messages.map(msg =>
-
-                    msg.id === messageId ? { ...msg, isPriority: !msg.isPriority } : msg
-
-                );
-
-                // Persist the change to the backend (same as for sending message)
-
-                updateUserDataOnBackend(window.currentUserData.email, window.currentUserData.conversations);
-
-            }
-
-            renderMessages(); // Re-render messages to reflect the change
-
-        }
-
-
-
-        // Function to update the NewConversationPage UI (form tabs)
-
-        function updateNewConversationUI() {
-
-            if (activeForm === 'chat') {
-
-                newChatTabButton.classList.add('bg-yellow-400', 'text-purple-800', 'shadow-md');
-
-                newChatTabButton.classList.remove('text-white', 'text-opacity-80', 'hover:bg-white', 'hover:bg-opacity-10');
-
-                newGroupTabButton.classList.remove('bg-yellow-400', 'text-purple-800', 'shadow-md');
-
-                newGroupTabButton.classList.add('text-white', 'text-opacity-80', 'hover:bg-white', 'hover:bg-opacity-10');
-
-
-
-                createChatForm.classList.remove('hidden');
-
-                createGroupForm.classList.add('hidden');
-
-            } else {
-
-                newGroupTabButton.classList.add('bg-yellow-400', 'text-purple-800', 'shadow-md');
-
-                newGroupTabButton.classList.remove('text-white', 'text-opacity-80', 'hover:bg-white', 'hover:bg-opacity-10');
-
-                newChatTabButton.classList.remove('bg-yellow-400', 'text-purple-800', 'shadow-md');
-
-                newChatTabButton.classList.add('text-white', 'text-opacity-80', 'hover:bg-white', 'hover:bg-opacity-10');
-
-
-
-                createGroupForm.classList.remove('hidden');
-
-                createChatForm.classList.add('hidden');
-
-            }
-
-        }
-
-
-
-        // Generic function to update user data on the backend
-
-        async function updateUserDataOnBackend(email, conversations) {
-            try {
-                const response = await fetch(`${backendUrl}/user/${encodeURIComponent(email)}`, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    // Send the entire updated conversations array
-                    body: JSON.stringify({ conversations: conversations })
-                });
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    console.error('Error updating user data:', errorData.error);
-                    // Optionally show a message box for persistent errors
-                    // showMessageBox(`Erreur lors de la sauvegarde des données: ${errorData.error}`, 'error');
-                }
-            } catch (error) {
-                console.error('Network error updating user data:', error);
-                // showMessageBox('Erreur réseau lors de la sauvegarde des données.', 'error');
+        // References to DOM elements
+        const landingPage = document.getElementById('landing-page');
+        const authPage = document.getElementById('auth-page');
+        const homePage = document.getElementById('home-page');
+        const chatPage = document.getElementById('chat-page');
+        const newConversationPage = document.getElementById('new-conversation-page');
+        const startAdventureButton = document.getElementById('start-adventure-button');
+
+        const authTitle = document.getElementById('auth-title');
+        const emailInput = document.getElementById('email-input');
+        const passwordInput = document.getElementById('password-input');
+        const submitButton = document.getElementById('submit-button');
+        const toggleText = document.getElementById('toggle-text');
+        const toggleButton = document.getElementById('toggle-button');
+        const authForm = document.getElementById('auth-form');
+        const messageBoxContainer = document.getElementById('message-box-container');
+        const authMessage = document.getElementById('auth-message'); // Ensure this ID exists in your HTML
+
+        // HomePage elements
+        const chatsTabButton = document.getElementById('chats-tab-button');
+        const groupsTabButton = document.getElementById('groups-tab-button');
+        const conversationListContainer = document.getElementById('conversation-list');
+        const addNewConversationButton = document.getElementById('add-new-conversation-button');
+
+        // ChatConversationPage elements
+        const chatContactName = document.getElementById('chat-contact-name');
+        const messagesDisplayArea = document.getElementById('messages-display-area');
+        const newMessageInput = document.getElementById('new-message-input');
+        const priorityToggleButton = document.getElementById('priority-toggle-button');
+        const sendMessageButton = document.getElementById('send-message-button');
+        const messageInputForm = document.getElementById('message-input-form');
+        const messagesEndRef = document.getElementById('messages-end-ref');
+        const backToHomeButton = document.getElementById('back-to-home-button');
+
+        // NewConversationPage elements
+        const newChatTabButton = document.getElementById('new-chat-tab-button');
+        const newGroupTabButton = document.getElementById('new-group-tab-button');
+        const createChatForm = document.getElementById('create-chat-form');
+        const createGroupForm = document.getElementById('create-group-form');
+        const chatContactNameInput = document.getElementById('chat-contact-name-input');
+        const chatContactIdentifierInput = document.getElementById('chat-contact-identifier-input');
+        const groupNameInput = document.getElementById('group-name-input');
+        const groupMembersInput = document.getElementById('group-members-input');
+        const groupEndDateInput = document.getElementById('group-end-date-input');
+        const backFromNewConversationButton = document.getElementById('back-from-new-conversation-button');
+
+        // Global state variables
+        let currentPage = 'landing'; // 'landing', 'auth', 'home', 'chat', or 'new-conversation'
+        let isRegisterMode = false; // true for registration, false for login
+        let activeTab = 'chats'; // 'chats' or 'groups' for HomePage
+        let activeForm = 'chat'; // 'chat' or 'group' for NewConversationPage
+        let isPriority = false; // Priority status for messages
+
+        // User and conversation data, now managed by the backend
+        // These will be populated after a successful login
+        window.currentUserData = null; // Will contain { email, contacts, conversations, groups }
+        window.currentChatId = null; // ID of the currently open conversation
+        let currentChatContactName = ''; // Name of the contact in the current conversation
+
+        // Starred conversations state (initialized empty, updated dynamically)
+        let starredConversations = new Set();
+
+
+        const backendUrl = 'https://essential-9ouy.onrender.com/api'; 
+        const socket = io('https://essential-9ouy.onrender.com');
+
+
+        // --- Utility functions ---
+
+        // Function to display a custom message box (replaces alert())
+        function showMessageBox(message, type = 'info') {
+            const overlay = document.createElement('div');
+            overlay.className = 'message-box-overlay'; // Keep the overlay style if you have one
+            overlay.innerHTML = `
+                <div class="message-box ${type === 'success' ? 'message-success' : 'message-error'}">
+                    <p class="text-lg font-semibold">${message}</p>
+                    <button onclick="this.closest('.message-box-overlay').remove()">OK</button>
+                </div>
+            `;
+            // Ensure messageBoxContainer exists and is visible
+            if (messageBoxContainer) {
+                messageBoxContainer.appendChild(overlay);
+            } else {
+                console.error("messageBoxContainer not found in DOM.");
+                alert(message); // Fallback if container is not ready
             }
         }
 
 
-
-
-
-        // --- Event Handlers ---
-
-
-
-        // Handle authentication form submission (login/registration)
-
-        authForm.addEventListener('submit', async (event) => {
-
-            event.preventDefault();
-
-            hideAuthMessage();
-
-
-
-            const email = emailInput.value.trim();
-
-            const password = passwordInput.value.trim();
-
-
-
-            if (!email || !password) {
-
-                showAuthMessage('Veuillez remplir tous les champs.', 'error');
-
-                return;
-
-            }
-
-
-
-            const endpoint = isRegisterMode ? `${backendUrl}/register` : `${backendUrl}/login`;
-
-            const method = 'POST';
-
-
-
-            try {
-
-                const response = await fetch(endpoint, {
-
-                    method: method,
-
-                    headers: {
-
-                        'Content-Type': 'application/json',
-
-                    },
-
-                    body: JSON.stringify({ email, password }),
-
-                });
-
-
-
-                const result = await response.json();
-
-
-
-                if (response.ok) {
-
-                    showAuthMessage(result.message, 'success');
-
-                    authForm.reset();
-
-
-
-                    if (!isRegisterMode) { // If it's a successful login
-
-                        // Store the logged-in user's email
-
-                        // This is crucial because the backend returns the email after login to identify the user
-
-                        window.currentUserEmail = result.userEmail;
-
-                        // Retrieve all user data (contacts, conversations)
-
-                        fetch(`${backendUrl}/user/${encodeURIComponent(window.currentUserEmail)}`)
-
-                            .then(res => {
-
-                                if (!res.ok) throw new Error('Failed to load user data');
-
-                                return res.json();
-
-                            })
-
-                            .then(userData => {
-
-                                window.currentUserData = userData; // Store user data globally
-
-                                // Re-initialize starred conversations based on fetched data
-
-                                starredConversations = new Set(userData.conversations.filter(c => c.isPriority).map(c => c.id));
-
-                                navigateTo('home'); // Navigate to home page
-
-                            })
-
-                            .catch((error) => {
-
-                                console.error('Error loading user data:', error);
-
-                                showAuthMessage("Impossible de charger les données du compte.", "error");
-
-                            });
-
-                    } else { // If it's a successful registration
-
-                        // After registration, we can automatically navigate to the login page
-
-                        isRegisterMode = false; // Switch to login mode
-
-                        updateAuthUI(); // Update authentication UI
-
-                        // showMessageBox("Inscription réussie ! Vous pouvez maintenant vous connecter.");
-
-                    }
-
-                } else {
-
-                    showAuthMessage(`Erreur: ${result.error || 'Une erreur inconnue est survenue.'}`, 'error');
-
-                }
-
-            } catch (error) {
-
-                console.error('Error communicating with server:', error);
-
-                showAuthMessage('Erreur de connexion au serveur. Assurez-vous qu\'il est en cours d\'exécution.', 'error');
-
-            }
-
-        });
-
-
-
-
-
-        // Handle new chat creation
-
-        createChatForm.addEventListener('submit', async (e) => {
+        // Function to display authentication messages (for login/registration errors or successes)
+        function showAuthMessage(message, type = 'info') {
+            authMessage.textContent = message;
+            authMessage.className = `message-box ${type === 'success' ? 'message-success' : 'message-error'} block`;
+            authMessage.classList.remove('hidden');
+        }
+
+        // Function to hide authentication messages
+        function hideAuthMessage() {
+            authMessage.classList.add('hidden');
+            authMessage.textContent = '';
+        }
+
+        // Function to update the authentication UI (title, button text)
+        function updateAuthUI() {
+            authTitle.textContent = isRegisterMode ? 'Inscription' : 'Connexion';
+            submitButton.textContent = isRegisterMode ? "S'inscrire" : "Se connecter";
+            toggleText.textContent = isRegisterMode ? "Déjà un compte ?" : "Pas encore de compte ?";
+            toggleButton.textContent = isRegisterMode ? "Se connecter" : "S'inscrire";
+        }
+
+        // Function to switch between application pages
+        function navigateTo(page, chatId = null, chatName = null) {
+            currentPage = page;
+            // Hide all pages
+            landingPage.classList.add('hidden');
+            authPage.classList.add('hidden');
+            homePage.classList.add('hidden');
+            chatPage.classList.add('hidden');
+            newConversationPage.classList.add('hidden');
+
+            // Display the desired page and update its UI if necessary
+            if (currentPage === 'landing') {
+                landingPage.classList.remove('hidden');
+            } else if (currentPage === 'auth') {
+                authPage.classList.remove('hidden');
+                updateAuthUI();
+            } else if (currentPage === 'home') {
+                homePage.classList.remove('hidden');
+                if (window.currentUserData) { // Ensure user data is loaded
+                    updateHomeUI(); // Update the conversation list
+                } else {
+                    // If no user data (e.g., refresh without session), redirect to authentication
+                    console.warn("No user data, redirecting to authentication.");
+                    navigateTo('auth');
+                }
+            } else if (currentPage === 'chat') {
+                chatPage.classList.remove('hidden');
+                window.currentChatId = chatId; // Set the ID of the current conversation
+                currentChatContactName = chatName || 'Contact';
+                chatContactName.textContent = currentChatContactName;
+                renderMessages(); // Display messages for this conversation
+            } else if (currentPage === 'new-conversation') {
+                newConversationPage.classList.remove('hidden');
+                updateNewConversationUI();
+            }
+        }
+
+        // Function to update the HomePage UI (tabs and conversation list)
+        function updateHomeUI() {
+            // Update tab styles
+            if (activeTab === 'chats') {
+                chatsTabButton.classList.add('bg-yellow-400', 'text-purple-800', 'shadow-md');
+                chatsTabButton.classList.remove('text-white', 'text-opacity-80', 'hover:bg-white', 'hover:bg-opacity-10');
+                groupsTabButton.classList.remove('bg-yellow-400', 'text-purple-800', 'shadow-md');
+                groupsTabButton.classList.add('text-white', 'text-opacity-80', 'hover:bg-white', 'hover:bg-opacity-10');
+            } else {
+                groupsTabButton.classList.add('bg-yellow-400', 'text-purple-800', 'shadow-md');
+                groupsTabButton.classList.remove('text-white', 'text-opacity-80', 'hover:bg-white', 'hover:bg-opacity-10');
+                chatsTabButton.classList.remove('bg-yellow-400', 'text-purple-800', 'shadow-md');
+                chatsTabButton.classList.add('text-white', 'text-opacity-80', 'hover:bg-white', 'hover:bg-opacity-10');
+            }
+
+            // Retrieve conversations from the logged-in user
+            const allConversations = window.currentUserData.conversations || [];
+
+            // Update starred status and sort conversations
+            const displayConversations = allConversations.map(conv => ({
+                ...conv,
+                isStarred: starredConversations.has(conv.id) || conv.isPriority // Also consider initial priority from backend
+            })).sort((a, b) => {
+                if (a.isStarred && !b.isStarred) return -1;
+                if (!a.isStarred && b.isStarred) return 1;
+                // Simple sort by time (needs improvement for actual dates/times)
+                // For a more robust sort by hour/date, a real timestamp property would be needed
+                return 0; // Maintain original order if priority is the same
+            });
+
+            const filteredConversations = displayConversations.filter(conv =>
+                (activeTab === 'chats' && !conv.isGroup) || (activeTab === 'groups' && conv.isGroup)
+            );
+
+            // Clear the current list
+            conversationListContainer.innerHTML = '';
+
+            // Render new conversations
+            if (filteredConversations.length === 0) {
+                const noConvDiv = document.createElement('div');
+                noConvDiv.className = 'text-center text-white text-opacity-70 mt-10';
+                noConvDiv.textContent = `Aucune ${activeTab === 'chats' ? 'conversation' : 'groupe'} pour le moment. Créez-en une !`;
+                conversationListContainer.appendChild(noConvDiv);
+            } else {
+                filteredConversations.forEach(conv => {
+                    const conversationDiv = document.createElement('div');
+                    conversationDiv.className = `flex items-center p-3 rounded-xl cursor-pointer transition-all duration-200 ease-in-out
+                        ${conv.isStarred ? 'bg-yellow-400 bg-opacity-20 ring-2 ring-yellow-300' : 'bg-white bg-opacity-10 hover:bg-opacity-20'}
+                        shadow-sm mb-3
+                    `;
+                    // Add event listener to navigate to chat page
+                    conversationDiv.addEventListener('click', () => {
+                        navigateTo('chat', conv.id, conv.name);
+                    });
+
+                    conversationDiv.innerHTML = `
+                        <div class="w-12 h-12 bg-purple-700 rounded-full flex items-center justify-center text-xl font-bold mr-4 flex-shrink-0">
+                            ${conv.name.charAt(0)}
+                        </div>
+                        <div class="flex-1 overflow-hidden">
+                            <div class="flex justify-between items-center">
+                                <h3 class="font-semibold text-lg truncate text-white">
+                                    ${conv.name}
+                                </h3>
+                                <span class="text-sm opacity-70 ml-2 flex-shrink-0">
+                                    ${conv.time}
+                                </span>
+                            </div>
+                            <p class="text-sm opacity-80 truncate">
+                                ${conv.lastMessage || 'Pas de message récent'}
+                            </p>
+                        </div>
+                        <button
+                            data-id="${conv.id}"
+                            class="star-button ml-4 p-1 rounded-full hover:bg-white hover:bg-opacity-20 transition-colors duration-150 focus:outline-none"
+                            title="${conv.isStarred ? 'Désactiver la priorité' : 'Activer la priorité'}"
+                        >
+                            <span class="text-2xl ${conv.isStarred ? 'text-yellow-300' : 'text-gray-400'}">
+                                ${conv.isStarred ? '⭐' : '☆'}
+                            </span>
+                        </button>
+                        ${conv.isGroup && conv.timer ? `
+                            <span class="text-sm bg-purple-700 text-white px-2 py-1 rounded-full ml-2 flex-shrink-0">
+                                ${conv.timer}
+                            </span>
+                        ` : ''}
+                    `;
+                    conversationListContainer.appendChild(conversationDiv);
+                });
+
+                // Attach event listeners to new star buttons
+                conversationListContainer.querySelectorAll('.star-button').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        e.stopPropagation(); // Prevent parent div click
+                        const id = button.dataset.id;
+                        toggleStar(id);
+                    });
+                });
+            }
+        }
+
+        // Function to toggle the star status of a conversation
+        function toggleStar(id) {
+            if (starredConversations.has(id)) {
+                starredConversations.delete(id);
+            } else {
+                starredConversations.add(id);
+            }
+            updateHomeUI(); // Re-render the list to reflect the change
+        }
+
+        // Functions for ChatConversationPage
+        function scrollToBottom() {
+            messagesEndRef.scrollIntoView({ behavior: "smooth" });
+        }
+
+        function renderMessages() {
+            messagesDisplayArea.innerHTML = ''; // Clear existing messages
+
+            // Find the current conversation in user data
+            const currentConversation = window.currentUserData.conversations.find(conv => conv.id === window.currentChatId);
+
+            if (!currentConversation || currentConversation.messages.length === 0) {
+                const noMessageDiv = document.createElement('div');
+                noMessageDiv.className = 'text-center text-white text-opacity-70 mt-10';
+                noMessageDiv.textContent = `Commencez à discuter avec ${currentChatContactName} !`;
+                messagesDisplayArea.appendChild(noMessageDiv);
+            } else {
+                // Copy messages to allow sorting without modifying the original
+                const messagesToDisplay = [...currentConversation.messages];
+
+                messagesToDisplay.forEach(msg => {
+                    const messageDiv = document.createElement('div');
+                    messageDiv.className = `flex ${msg.sender === 'Moi' ? 'justify-end' : 'justify-start'} mb-3`;
+                    messageDiv.innerHTML = `
+                        <div
+                            data-id="${msg.id}"
+                            class="relative p-3 rounded-lg shadow-sm max-w-[75%] cursor-pointer transition-all duration-200 ease-in-out
+                                ${msg.sender === 'Moi'
+                                    ? 'bg-purple-600 text-white rounded-br-none'
+                                    : 'bg-white bg-opacity-20 text-white rounded-bl-none'
+                                }
+                                ${msg.isPriority ? 'ring-2 ring-yellow-400 transform scale-105' : ''}
+                            "
+                        >
+                            <p class="text-sm leading-snug">${msg.text}</p>
+                            <div class="text-xs text-right mt-1 opacity-75">
+                                ${msg.isPriority ? `<span class="inline-block mr-1 text-yellow-300">⭐</span>` : ''}
+                                ${msg.timestamp}
+                            </div>
+                        </div>
+                    `;
+                    messagesDisplayArea.appendChild(messageDiv);
+
+                    // Attach event listener to toggle priority
+                    messageDiv.querySelector('.relative').addEventListener('click', (e) => {
+                        toggleMessagePriority(window.currentChatId, msg.id);
+                    });
+                });
+            }
+            scrollToBottom();
+        }
+
+        function handleSendMessage(e) {
             e.preventDefault();
-            const contactName = chatContactNameInput.value.trim();
-            const contactEmail = chatContactIdentifierInput.value.trim(); // Renamed for clarity
-        
-            if (contactName && contactEmail) {
-                // Simple email validation (can be more robust)
-                if (!contactEmail.includes('@') || !contactEmail.includes('.')) {
-                    showMessageBox("Veuillez entrer une adresse email valide pour le contact.", "error");
+            const text = newMessageInput.value.trim();
+            if (text && window.currentChatId) {
+                const newMsg = {
+                    id: Date.now(), // Unique ID for the message
+                    text: text,
+                    sender: 'Moi', // Message sent by current user
+                    isPriority: isPriority,
+                    timestamp: new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })
+                };
+
+                // Find the current conversation and add the message
+                const currentConversation = window.currentUserData.conversations.find(conv => conv.id === window.currentChatId);
+                if (currentConversation) {
+                    if (!currentConversation.messages) {
+                        currentConversation.messages = []; // Ensure messages array exists
+                    }
+                    currentConversation.messages.push(newMsg);
+                    currentConversation.lastMessage = newMsg.text; // Update last message
+                    currentConversation.time = newMsg.timestamp; // Update last message time
+
+                    // **** IMPORTANT: Send this update to the backend ****
+                    // This is a crucial step to persist messages and last activity.
+                    // For now, I will leave this part as a TODO,
+                    // as it would require a new PUT route on the backend to
+                    // update a specific conversation with its messages.
+                    // For example: fetch(`${backendUrl}/conversations/${window.currentChatId}`, { method: 'PUT', body: JSON.stringify(currentConversation) });
+                    // For now, messages will not be persisted after a refresh.
+                    updateUserDataOnBackend(window.currentUserData.email, window.currentUserData.conversations);
+
+                } else {
+                    console.error("Current conversation not found for message addition.");
                     return;
                 }
-        
+
+                newMessageInput.value = ''; // Clear input
+                isPriority = false; // Reset priority button
+                priorityToggleButton.classList.remove('bg-yellow-400', 'text-purple-800', 'shadow-md');
+                priorityToggleButton.classList.add('bg-white', 'bg-opacity-20', 'text-white', 'text-opacity-70', 'hover:bg-opacity-30');
+                renderMessages(); // Re-render messages
+                updateHomeUI(); // Update conversation list (for lastMessage/time)
+            }
+        }
+
+        function toggleMessagePriority(chatId, messageId) {
+            const currentConversation = window.currentUserData.conversations.find(conv => conv.id === chatId);
+            if (currentConversation) {
+                currentConversation.messages = currentConversation.messages.map(msg =>
+                    msg.id === messageId ? { ...msg, isPriority: !msg.isPriority } : msg
+                );
+                // Persist the change to the backend (same as for sending message)
+                updateUserDataOnBackend(window.currentUserData.email, window.currentUserData.conversations);
+            }
+            renderMessages(); // Re-render messages to reflect the change
+        }
+
+        // Function to update the NewConversationPage UI (form tabs)
+        function updateNewConversationUI() {
+            if (activeForm === 'chat') {
+                newChatTabButton.classList.add('bg-yellow-400', 'text-purple-800', 'shadow-md');
+                newChatTabButton.classList.remove('text-white', 'text-opacity-80', 'hover:bg-white', 'hover:bg-opacity-10');
+                newGroupTabButton.classList.remove('bg-yellow-400', 'text-purple-800', 'shadow-md');
+                newGroupTabButton.classList.add('text-white', 'text-opacity-80', 'hover:bg-white', 'hover:bg-opacity-10');
+
+                createChatForm.classList.remove('hidden');
+                createGroupForm.classList.add('hidden');
+            } else {
+                newGroupTabButton.classList.add('bg-yellow-400', 'text-purple-800', 'shadow-md');
+                newGroupTabButton.classList.remove('text-white', 'text-opacity-80', 'hover:bg-white', 'hover:bg-opacity-10');
+                newChatTabButton.classList.remove('bg-yellow-400', 'text-purple-800', 'shadow-md');
+                newChatTabButton.classList.add('text-white', 'text-opacity-80', 'hover:bg-white', 'hover:bg-opacity-10');
+
+                createGroupForm.classList.remove('hidden');
+                createChatForm.classList.add('hidden');
+            }
+        }
+
+        // Generic function to update user data on the backend
+        async function updateUserDataOnBackend(email, conversations) {
+            try {
+                const response = await fetch(`${backendUrl}/user/${encodeURIComponent(email)}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ conversations: conversations }) // Send only what has changed
+                });
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    console.error('Error updating user data:', errorData.error);
+                }
+            } catch (error) {
+                console.error('Network error updating user data:', error);
+            }
+        }
+
+
+        // --- Event Handlers ---
+
+        // Handle authentication form submission (login/registration)
+        authForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            hideAuthMessage();
+
+            const email = emailInput.value.trim();
+            const password = passwordInput.value.trim();
+
+            if (!email || !password) {
+                showAuthMessage('Veuillez remplir tous les champs.', 'error');
+                return;
+            }
+
+            const endpoint = isRegisterMode ? `${backendUrl}/register` : `${backendUrl}/login`;
+            const method = 'POST';
+
+            try {
+                const response = await fetch(endpoint, {
+                    method: method,
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email, password }),
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    showAuthMessage(result.message, 'success');
+                    authForm.reset();
+
+                    if (!isRegisterMode) { // If it's a successful login
+                        // Store the logged-in user's email
+                        // This is crucial because the backend returns the email after login to identify the user
+                        window.currentUserEmail = result.userEmail;
+                        // Retrieve all user data (contacts, conversations)
+                        fetch(`${backendUrl}/user/${encodeURIComponent(window.currentUserEmail)}`)
+                            .then(res => {
+                                if (!res.ok) throw new Error('Failed to load user data');
+                                return res.json();
+                            })
+                            .then(userData => {
+                                window.currentUserData = userData; // Store user data globally
+                                // Re-initialize starred conversations based on fetched data
+                                starredConversations = new Set(userData.conversations.filter(c => c.isPriority).map(c => c.id));
+                                navigateTo('home'); // Navigate to home page
+                            })
+                            .catch((error) => {
+                                console.error('Error loading user data:', error);
+                                showAuthMessage("Impossible de charger les données du compte.", "error");
+                            });
+                    } else { // If it's a successful registration
+                        // After registration, we can automatically navigate to the login page
+                        isRegisterMode = false; // Switch to login mode
+                        updateAuthUI(); // Update authentication UI
+                        // showMessageBox("Inscription réussie ! Vous pouvez maintenant vous connecter.");
+                    }
+                } else {
+                    showAuthMessage(`Erreur: ${result.error || 'Une erreur inconnue est survenue.'}`, 'error');
+                }
+            } catch (error) {
+                console.error('Error communicating with server:', error);
+                showAuthMessage('Erreur de connexion au serveur. Assurez-vous qu\'il est en cours d\'exécution.', 'error');
+            }
+        });
+
+
+        // Handle new chat creation
+        createChatForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const contactName = chatContactNameInput.value.trim();
+            const contactIdentifier = chatContactIdentifierInput.value.trim();
+
+            if (contactName && contactIdentifier) {
                 try {
-                    const response = await fetch(`${backendUrl}/contacts/add-by-email`, { // New backend endpoint
+                    const response = await fetch(`${backendUrl}/chats`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
                         },
                         body: JSON.stringify({
-                            adderEmail: window.currentUserData.email, // Email of the current logged-in user
-                            contactEmail: contactEmail, // Email of the contact to add
-                            contactName: contactName // Desired name for the contact
+                            userId: window.currentUserData.email, // Use the logged-in user's email
+                            name: contactName,
+                            identifier: contactIdentifier,
                         }),
                     });
-        
+
                     const result = await response.json();
-        
+
                     if (response.ok) {
-                        showMessageBox(`Contact ${contactName} (${contactEmail}) ajouté avec succès !`, 'success');
-        
-                        // Re-fetch user data to get the updated contacts and conversations
-                        const updatedUserDataResponse = await fetch(`${backendUrl}/user/${encodeURIComponent(window.currentUserData.email)}`);
-                        if (updatedUserDataResponse.ok) {
-                            window.currentUserData = await updatedUserDataResponse.json();
-                            starredConversations = new Set(window.currentUserData.conversations.filter(c => c.isPriority).map(c => c.id));
-                            updateHomeUI(); // Update the conversation list display
-                            navigateTo('home');
-                        } else {
-                            console.error('Failed to re-fetch user data after adding contact.');
-                            showMessageBox('Contact ajouté, mais impossible de rafraîchir la liste des conversations.', 'error');
-                            navigateTo('home'); // Still navigate home even if data refresh fails
-                        }
+                        showMessageBox(`Chat avec ${contactName} créé avec succès !`, 'success');
+                        // Add the new conversation to the user's local data
+                        window.currentUserData.conversations.push(result.newChat);
+                        updateHomeUI(); // Update the conversation list display
+                        navigateTo('home');
                     } else {
-                        showMessageBox(`Erreur lors de l'ajout du contact : ${result.error || 'Erreur inconnue'}`, 'error');
+                        showMessageBox(`Erreur lors de la création du chat : ${result.error || 'Erreur inconnue'}`, 'error');
                     }
                 } catch (error) {
-                    console.error('Erreur réseau lors de l\'ajout du contact :', error);
-                    showMessageBox('Impossible d\'ajouter le contact. Erreur de connexion au serveur.', 'error');
+                    console.error('Network error during chat creation:', error);
+                    showMessageBox('Impossible de créer le chat. Erreur de connexion au serveur.', 'error');
                 }
-        
+
                 chatContactNameInput.value = '';
                 chatContactIdentifierInput.value = '';
             } else {
-                showMessageBox("Veuillez entrer un nom et une adresse email pour le contact.");
+                showMessageBox("Veuillez entrer un nom et un identifiant pour le contact.");
+            }
+        });
+
+        // Handle new group creation
+        createGroupForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const groupName = groupNameInput.value.trim();
+            const groupMembers = groupMembersInput.value.trim();
+            const groupEndDate = groupEndDateInput.value.trim();
+
+            if (groupName && groupMembers && groupEndDate) {
+                // Convert member string to array
+                const membersArray = groupMembers.split(',').map(member => member.trim()).filter(member => member !== '');
+
+                if (membersArray.length === 0) {
+                    showMessageBox("Veuillez spécifier au moins un membre pour le groupe.");
+                    return;
+                }
+
+                try {
+                    const response = await fetch(`${backendUrl}/groups`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            userId: window.currentUserData.email, // Use the logged-in user's email
+                            name: groupName,
+                            members: membersArray,
+                            endDate: groupEndDate,
+                        }),
+                    });
+
+                    const result = await response.json();
+
+                    if (response.ok) {
+                        showMessageBox(`Groupe "${groupName}" créé avec succès !`, 'success');
+                        // Add the new group to the user's local data
+                        window.currentUserData.conversations.push(result.newGroup);
+                        updateHomeUI(); // Update the conversation list display
+                        navigateTo('home');
+                    } else {
+                        showMessageBox(`Erreur lors de la création du groupe : ${result.error || 'Erreur inconnue'}`, 'error');
+                    }
+                } catch (error) {
+                    console.error('Network error during group creation:', error);
+                    showMessageBox('Impossible de créer le groupe. Erreur de connexion au serveur.', 'error');
+                }
+
+                groupNameInput.value = '';
+                groupMembersInput.value = '';
+                groupEndDateInput.value = '';
+            } else {
+                showMessageBox("Veuillez remplir tous les champs du groupe.");
             }
         });
 
 
-
-        // Handle new group creation
-
-        createGroupForm.addEventListener('submit', async (e) => {
-
-            e.preventDefault();
-
-            const groupName = groupNameInput.value.trim();
-
-            const groupMembers = groupMembersInput.value.trim();
-
-            const groupEndDate = groupEndDateInput.value.trim();
-
-
-
-            if (groupName && groupMembers && groupEndDate) {
-
-                // Convert member string to array
-
-                const membersArray = groupMembers.split(',').map(member => member.trim()).filter(member => member !== '');
-
-
-
-                if (membersArray.length === 0) {
-
-                    showMessageBox("Veuillez spécifier au moins un membre pour le groupe.");
-
-                    return;
-
-                }
-
-
-
-                try {
-
-                    const response = await fetch(`${backendUrl}/groups`, {
-
-                        method: 'POST',
-
-                        headers: {
-
-                            'Content-Type': 'application/json',
-
-                        },
-
-                        body: JSON.stringify({
-
-                            userId: window.currentUserData.email, // Use the logged-in user's email
-
-                            name: groupName,
-
-                            members: membersArray,
-
-                            endDate: groupEndDate,
-
-                        }),
-
-                    });
-
-
-
-                    const result = await response.json();
-
-
-
-                    if (response.ok) {
-
-                        showMessageBox(`Groupe "${groupName}" créé avec succès !`, 'success');
-
-                        // Add the new group to the user's local data
-
-                        window.currentUserData.conversations.push(result.newGroup);
-
-                        updateHomeUI(); // Update the conversation list display
-
-                        navigateTo('home');
-
-                    } else {
-
-                        showMessageBox(`Erreur lors de la création du groupe : ${result.error || 'Erreur inconnue'}`, 'error');
-
-                    }
-
-                } catch (error) {
-
-                    console.error('Network error during group creation:', error);
-
-                    showMessageBox('Impossible de créer le groupe. Erreur de connexion au serveur.', 'error');
-
-                }
-
-
-
-                groupNameInput.value = '';
-
-                groupMembersInput.value = '';
-
-                groupEndDateInput.value = '';
-
-            } else {
-
-                showMessageBox("Veuillez remplir tous les champs du groupe.");
-
-            }
-
-        });
-
-
-
-
-
-        // --- UI Element Event Listeners ---
-
-
-
-        // Handle click on toggle button (Login/Register)
-
-        toggleButton.addEventListener('click', () => {
-
-            isRegisterMode = !isRegisterMode;
-
-            updateAuthUI();
-
-            emailInput.value = '';
-
-            passwordInput.value = '';
-
-            hideAuthMessage(); // Hide message when switching mode
-
-        });
-
-
-
-        // Handle click on "Start Adventure!" button
-
-        startAdventureButton.addEventListener('click', () => {
-
-            navigateTo('auth');
-
-        });
-
-
-
-        // Handle clicks on HomePage tabs
-
-        chatsTabButton.addEventListener('click', () => {
-
-            activeTab = 'chats';
-
-            updateHomeUI();
-
-        });
-
-
-
-        groupsTabButton.addEventListener('click', () => {
-
-            activeTab = 'groups';
-
-            updateHomeUI();
-
-        });
-
-
-
-        // Handle click on '+' button to add a new conversation
-
-        addNewConversationButton.addEventListener('click', () => {
-
-            navigateTo('new-conversation');
-
-        });
-
-
-
-        // Handle message submission on chat page
-
-        messageInputForm.addEventListener('submit', handleSendMessage);
-
-
-
-        // Handle click on message priority button
-
-        priorityToggleButton.addEventListener('click', () => {
-
-            isPriority = !isPriority;
-
-            if (isPriority) {
-
-                priorityToggleButton.classList.add('bg-yellow-400', 'text-purple-800', 'shadow-md');
-
-                priorityToggleButton.classList.remove('bg-white', 'bg-opacity-20', 'text-white', 'text-opacity-70', 'hover:bg-opacity-30');
-
-            } else {
-
-                priorityToggleButton.classList.remove('bg-yellow-400', 'text-purple-800', 'shadow-md');
-
-                priorityToggleButton.classList.add('bg-white', 'bg-opacity-20', 'text-white', 'text-opacity-70', 'hover:bg-opacity-30');
-
-            }
-
-        });
-
-
-
-        // Handle click on back button from chat page
-
-        backToHomeButton.addEventListener('click', () => {
-
-            navigateTo('home');
-
-        });
-
-
-
-        // Handle clicks on New Chat/New Group tabs
-
-        newChatTabButton.addEventListener('click', () => {
-
-            activeForm = 'chat';
-
-            updateNewConversationUI();
-
-        });
-
-
-
-        newGroupTabButton.addEventListener('click', () => {
-
-            activeForm = 'group';
-
-            updateNewConversationUI();
-
-        });
-
-
-
-        // Handle back button from new conversation page
-
-        backFromNewConversationButton.addEventListener('click', () => {
-
-            navigateTo('home');
-
-        });
-
-
-
-        // Initial UI update when the page loads
-
-        document.addEventListener('DOMContentLoaded', () => {
-
-            navigateTo('landing'); // Display the landing page by default
-
-        });
-
-
-
-    </script>
-
+        // --- UI Element Event Listeners ---
+
+        // Handle click on toggle button (Login/Register)
+        toggleButton.addEventListener('click', () => {
+            isRegisterMode = !isRegisterMode;
+            updateAuthUI();
+            emailInput.value = '';
+            passwordInput.value = '';
+            hideAuthMessage(); // Hide message when switching mode
+        });
+
+        // Handle click on "Start Adventure!" button
+        startAdventureButton.addEventListener('click', () => {
+            navigateTo('auth');
+        });
+
+        // Handle clicks on HomePage tabs
+        chatsTabButton.addEventListener('click', () => {
+            activeTab = 'chats';
+            updateHomeUI();
+        });
+
+        groupsTabButton.addEventListener('click', () => {
+            activeTab = 'groups';
+            updateHomeUI();
+        });
+
+        // Handle click on '+' button to add a new conversation
+        addNewConversationButton.addEventListener('click', () => {
+            navigateTo('new-conversation');
+        });
+
+        // Handle message submission on chat page
+        messageInputForm.addEventListener('submit', handleSendMessage);
+
+        // Handle click on message priority button
+        priorityToggleButton.addEventListener('click', () => {
+            isPriority = !isPriority;
+            if (isPriority) {
+                priorityToggleButton.classList.add('bg-yellow-400', 'text-purple-800', 'shadow-md');
+                priorityToggleButton.classList.remove('bg-white', 'bg-opacity-20', 'text-white', 'text-opacity-70', 'hover:bg-opacity-30');
+            } else {
+                priorityToggleButton.classList.remove('bg-yellow-400', 'text-purple-800', 'shadow-md');
+                priorityToggleButton.classList.add('bg-white', 'bg-opacity-20', 'text-white', 'text-opacity-70', 'hover:bg-opacity-30');
+            }
+        });
+
+        // Handle click on back button from chat page
+        backToHomeButton.addEventListener('click', () => {
+            navigateTo('home');
+        });
+
+        // Handle clicks on New Chat/New Group tabs
+        newChatTabButton.addEventListener('click', () => {
+            activeForm = 'chat';
+            updateNewConversationUI();
+        });
+
+        newGroupTabButton.addEventListener('click', () => {
+            activeForm = 'group';
+            updateNewConversationUI();
+        });
+
+        // Handle back button from new conversation page
+        backFromNewConversationButton.addEventListener('click', () => {
+            navigateTo('home');
+        });
+
+        // Initial UI update when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            navigateTo('landing'); // Display the landing page by default
+        });
+
+    </script>
 </body>
-
 </html>
