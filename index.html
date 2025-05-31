@@ -482,7 +482,7 @@
 
                         id="chat-contact-name-input"
 
-                        placeholder="Nom du contact (ex: Alice)"
+                        placeholder="Email du contact"
 
                         class="w-full p-4 rounded-xl bg-white bg-opacity-20 border border-white border-opacity-30 text-white placeholder-white placeholder-opacity-70 focus:outline-none focus:ring-2 focus:ring-yellow-300 transition duration-200"
 
@@ -492,7 +492,7 @@
 
                     <input
 
-                        type="text"
+                        type="email"
 
                         id="chat-contact-identifier-input"
 
@@ -1547,86 +1547,61 @@
         // Handle new chat creation
 
         createChatForm.addEventListener('submit', async (e) => {
-
-            e.preventDefault();
-
-            const contactName = chatContactNameInput.value.trim();
-
-            const contactIdentifier = chatContactIdentifierInput.value.trim();
-
-
-
-            if (contactName && contactIdentifier) {
-
-                try {
-
-                    const response = await fetch(`${backendUrl}/chats`, {
-
-                        method: 'POST',
-
-                        headers: {
-
-                            'Content-Type': 'application/json',
-
-                        },
-
-                        body: JSON.stringify({
-
-                            userId: window.currentUserData.email, // Use the logged-in user's email
-
-                            name: contactName,
-
-                            identifier: contactIdentifier,
-
-                        }),
-
-                    });
-
-
-
-                    const result = await response.json();
-
-
-
-                    if (response.ok) {
-
-                        showMessageBox(`Chat avec ${contactName} créé avec succès !`, 'success');
-
-                        // Add the new conversation to the user's local data
-
-                        window.currentUserData.conversations.push(result.newChat);
-
-                        updateHomeUI(); // Update the conversation list display
-
-                        navigateTo('home');
-
-                    } else {
-
-                        showMessageBox(`Erreur lors de la création du chat : ${result.error || 'Erreur inconnue'}`, 'error');
-
-                    }
-
-                } catch (error) {
-
-                    console.error('Network error during chat creation:', error);
-
-                    showMessageBox('Impossible de créer le chat. Erreur de connexion au serveur.', 'error');
-
-                }
-
-
-
-                chatContactNameInput.value = '';
-
-                chatContactIdentifierInput.value = '';
-
-            } else {
-
-                showMessageBox("Veuillez entrer un nom et un identifiant pour le contact.");
-
-            }
-
-        });
+            e.preventDefault();
+            const contactName = chatContactNameInput.value.trim();
+            const contactEmail = chatContactIdentifierInput.value.trim(); // Renamed for clarity
+        
+            if (contactName && contactEmail) {
+                // Simple email validation (can be more robust)
+                if (!contactEmail.includes('@') || !contactEmail.includes('.')) {
+                    showMessageBox("Veuillez entrer une adresse email valide pour le contact.", "error");
+                    return;
+                }
+        
+                try {
+                    const response = await fetch(`${backendUrl}/contacts/add-by-email`, { // New backend endpoint
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            adderEmail: window.currentUserData.email, // Email of the current logged-in user
+                            contactEmail: contactEmail, // Email of the contact to add
+                            contactName: contactName // Desired name for the contact
+                        }),
+                    });
+        
+                    const result = await response.json();
+        
+                    if (response.ok) {
+                        showMessageBox(`Contact ${contactName} (${contactEmail}) ajouté avec succès !`, 'success');
+        
+                        // Re-fetch user data to get the updated contacts and conversations
+                        const updatedUserDataResponse = await fetch(`${backendUrl}/user/${encodeURIComponent(window.currentUserData.email)}`);
+                        if (updatedUserDataResponse.ok) {
+                            window.currentUserData = await updatedUserDataResponse.json();
+                            starredConversations = new Set(window.currentUserData.conversations.filter(c => c.isPriority).map(c => c.id));
+                            updateHomeUI(); // Update the conversation list display
+                            navigateTo('home');
+                        } else {
+                            console.error('Failed to re-fetch user data after adding contact.');
+                            showMessageBox('Contact ajouté, mais impossible de rafraîchir la liste des conversations.', 'error');
+                            navigateTo('home'); // Still navigate home even if data refresh fails
+                        }
+                    } else {
+                        showMessageBox(`Erreur lors de l'ajout du contact : ${result.error || 'Erreur inconnue'}`, 'error');
+                    }
+                } catch (error) {
+                    console.error('Erreur réseau lors de l\'ajout du contact :', error);
+                    showMessageBox('Impossible d\'ajouter le contact. Erreur de connexion au serveur.', 'error');
+                }
+        
+                chatContactNameInput.value = '';
+                chatContactIdentifierInput.value = '';
+            } else {
+                showMessageBox("Veuillez entrer un nom et une adresse email pour le contact.");
+            }
+        });
 
 
 
