@@ -212,40 +212,40 @@
                 </button>
             </form>
         </div>
-            <div id="new-conversation-page" class="hidden min-h-screen bg-gradient-to-br from-purple-800 to-indigo-900 text-white flex flex-col p-6">
-                <div class="flex items-center justify-between mb-8">
-                    <button id="back-from-new-conversation-button" class="text-white text-3xl p-2 rounded-full hover:bg-white hover:bg-opacity-20 transition-colors duration-200">
-                        <i class="fas fa-arrow-left"></i>
-                    </button>
-                    <h2 class="text-3xl font-bold text-center flex-grow">Nouvelle Conversation</h2>
-                    <div class="w-8"></div> </div>
+        <div id="new-conversation-page" class="hidden min-h-screen bg-gradient-to-br from-purple-800 to-indigo-900 text-white flex flex-col p-6">
+            <div class="flex items-center justify-between mb-8">
+                <button id="back-from-new-conversation-button" class="text-white text-3xl p-2 rounded-full hover:bg-white hover:bg-opacity-20 transition-colors duration-200">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h2 class="text-3xl font-bold text-center flex-grow">Nouvelle Conversation</h2>
+                <div class="w-8"></div> </div>
             
-                <div class="flex mb-6 bg-purple-700 rounded-xl shadow-lg p-2">
-                    <button id="new-chat-tab-button" class="flex-1 py-3 px-4 rounded-lg font-semibold text-lg transition-all duration-200 ease-in-out">
+            <div class="flex mb-6 bg-purple-700 rounded-xl shadow-lg p-2">
+                <button id="new-chat-tab-button" class="flex-1 py-3 px-4 rounded-lg font-semibold text-lg transition-all duration-200 ease-in-out">
                         Nouveau Chat
-                    </button>
-                    <button id="new-group-tab-button" class="flex-1 py-3 px-4 rounded-lg font-semibold text-lg transition-all duration-200 ease-in-out">
-                        Nouveau Groupe
-                    </button>
-                </div>
-            
-                <form id="create-chat-form" class="flex flex-col space-y-6">
-                    <input type="text" id="chat-contact-name-input" placeholder="Nom du contact (ex: Alice)" class="p-4 rounded-xl bg-white bg-opacity-10 border border-purple-600 text-white placeholder-white placeholder-opacity-70 focus:ring-2 focus:ring-yellow-400 focus:outline-none transition-all duration-200">
-                    <input type="email" id="chat-contact-identifier-input" placeholder="Email du contact (ex: alice@exemple.com)" class="p-4 rounded-xl bg-white bg-opacity-10 border border-purple-600 text-white placeholder-white placeholder-opacity-70 focus:ring-2 focus:ring-yellow-400 focus:outline-none transition-all duration-200">
-                    <button type="submit" class="bg-yellow-400 text-purple-800 font-bold py-4 rounded-xl shadow-lg hover:bg-yellow-300 transition-colors duration-200 text-xl">
-                        Créer le Chat
-                    </button>
-                </form>
-            
-                <form id="create-group-form" class="hidden flex-col space-y-6">
-                    <input type="text" id="group-name-input" placeholder="Nom du groupe (ex: Projet Essential)" class="p-4 rounded-xl bg-white bg-opacity-10 border border-purple-600 text-white placeholder-white placeholder-opacity-70 focus:ring-2 focus:ring-yellow-400 focus:outline-none transition-all duration-200">
-                    <input type="text" id="group-members-input" placeholder="Emails des membres (séparés par des virgules)" class="p-4 rounded-xl bg-white bg-opacity-10 border border-purple-600 text-white placeholder-white placeholder-opacity-70 focus:ring-2 focus:ring-yellow-400 focus:outline-none transition-all duration-200">
-                    <input type="date" id="group-end-date-input" class="p-4 rounded-xl bg-white bg-opacity-10 border border-purple-600 text-white placeholder-white placeholder-opacity-70 focus:ring-2 focus:ring-yellow-400 focus:outline-none transition-all duration-200">
-                    <button type="submit" class="bg-yellow-400 text-purple-800 font-bold py-4 rounded-xl shadow-lg hover:bg-yellow-300 transition-colors duration-200 text-xl">
-                        Créer le Groupe
-                    </button>
-                </form>
+                </button>
+                <button id="new-group-tab-button" class="flex-1 py-3 px-4 rounded-lg font-semibold text-lg transition-all duration-200 ease-in-out">
+                    Nouveau Groupe
+                </button>
             </div>
+            
+            <form id="create-chat-form" class="flex flex-col space-y-6">
+                <input type="text" id="chat-contact-name-input" placeholder="Nom du contact (ex: Alice)" class="p-4 rounded-xl bg-white bg-opacity-10 border border-purple-600 text-white placeholder-white placeholder-opacity-70 focus:ring-2 focus:ring-yellow-400 focus:outline-none transition-all duration-200">
+                <input type="email" id="chat-contact-identifier-input" placeholder="Email du contact (ex: alice@exemple.com)" class="p-4 rounded-xl bg-white bg-opacity-10 border border-purple-600 text-white placeholder-white placeholder-opacity-70 focus:ring-2 focus:ring-yellow-400 focus:outline-none transition-all duration-200">
+                <button type="submit" class="bg-yellow-400 text-purple-800 font-bold py-4 rounded-xl shadow-lg hover:bg-yellow-300 transition-colors duration-200 text-xl">
+                    Créer le Chat
+                </button>
+            </form>
+            
+            <form id="create-group-form" class="hidden flex-col space-y-6">
+                <input type="text" id="group-name-input" placeholder="Nom du groupe (ex: Projet Essential)" class="p-4 rounded-xl bg-white bg-opacity-10 border border-purple-600 text-white placeholder-white placeholder-opacity-70 focus:ring-2 focus:ring-yellow-400 focus:outline-none transition-all duration-200">
+                <input type="text" id="group-members-input" placeholder="Emails des membres (séparés par des virgules)" class="p-4 rounded-xl bg-white bg-opacity-10 border border-purple-600 text-white placeholder-white placeholder-opacity-70 focus:ring-2 focus:ring-yellow-400 focus:outline-none transition-all duration-200">
+                <input type="date" id="group-end-date-input" class="p-4 rounded-xl bg-white bg-opacity-10 border border-purple-600 text-white placeholder-white placeholder-opacity-70 focus:ring-2 focus:ring-yellow-400 focus:outline-none transition-all duration-200">
+                <button type="submit" class="bg-yellow-400 text-purple-800 font-bold py-4 rounded-xl shadow-lg hover:bg-yellow-300 transition-colors duration-200 text-xl">
+                    Créer le Groupe
+                </button>
+            </form>
+        </div>
         </div>
     </div>
 
