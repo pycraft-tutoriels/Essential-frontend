@@ -261,7 +261,7 @@
         const createChatForm = document.getElementById('create-chat-form');
         const createGroupForm = document.getElementById('create-group-form');
         const chatContactNameInput = document.getElementById('chat-contact-name-input');
-        const chatContactIdentifierInput = document.getElementById('chat-contact-identifier-input'); // This is the one we adapted for email
+        const chatContactIdentifierInput = document.getElementById('chat-contact-identifier-input');
         const groupNameInput = document.getElementById('group-name-input');
         const groupMembersInput = document.getElementById('group-members-input');
         const groupEndDateInput = document.getElementById('group-end-date-input');
@@ -282,7 +282,7 @@
 
         const backendUrl = 'https://essential-9ouy.onrender.com';
 
-        // --- Utility functions (Unchanged from your code) ---
+        // --- Utility functions ---
 
         function showMessageBox(message, type = 'info') {
             const overlay = document.createElement('div');
@@ -500,6 +500,7 @@
             scrollToBottom();
         }
 
+        // Functions for ChatConversationPage (Continued)
         function handleSendMessage(e) {
             e.preventDefault();
             const text = newMessageInput.value.trim();
@@ -665,7 +666,8 @@
                 }
 
                 try {
-                    const response = await fetch(`${backendUrl}/contacts/add-by-email`, { // New backend endpoint for email
+                    // This endpoint needs to be implemented on your backend to handle adding contact by email
+                    const response = await fetch(`${backendUrl}/contacts/add-by-email`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -681,8 +683,9 @@
 
                     if (response.ok) {
                         showMessageBox(`Contact ${contactName} (${contactEmail}) ajouté avec succès !`, 'success');
-                        
+
                         // Re-fetch user data to get the updated conversations (including the new one)
+                        // This is important to ensure the frontend's window.currentUserData is in sync
                         const updatedUserDataResponse = await fetch(`${backendUrl}/user/${encodeURIComponent(window.currentUserData.email)}`);
                         if (updatedUserDataResponse.ok) {
                             window.currentUserData = await updatedUserDataResponse.json();
@@ -710,7 +713,7 @@
             }
         });
 
-        // Handle new group creation (Unchanged)
+        // Handle new group creation
         createGroupForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const groupName = groupNameInput.value.trim();
@@ -763,7 +766,7 @@
         });
 
 
-        // --- UI Element Event Listeners (Unchanged) ---
+        // --- UI Element Event Listeners ---
 
         toggleButton.addEventListener('click', () => {
             isRegisterMode = !isRegisterMode;
