@@ -6,7 +6,6 @@
     <title>Essential - Simplifie tes conversations</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Styles pour la boîte de message personnalisée */
         .message-box-overlay {
             position: fixed;
             top: 0;
@@ -22,27 +21,26 @@
         .message-box {
             background-color: white;
             padding: 2rem;
-            border-radius: 0.75rem; /* rounded-xl */
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); /* shadow-2xl */
+            border-radius: 0.75rem;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
             text-align: center;
-            color: #4c1d95; /* purple-800 */
+            color: #4c1d95;
             max-width: 90%;
             width: 400px;
         }
         .message-box button {
-            background-color: #facc15; /* yellow-400 */
-            color: #4c1d95; /* purple-800 */
+            background-color: #facc15;
+            color: #4c1d95; 
             font-weight: bold;
             padding: 0.75rem 1.5rem;
-            border-radius: 9999px; /* rounded-full */
+            border-radius: 9999px; 
             margin-top: 1rem;
             transition: all 0.3s ease-in-out;
         }
         .message-box button:hover {
-            background-color: #fde047; /* yellow-300 */
+            background-color: #fde047; 
             transform: scale(1.05);
         }
-        /* Styles pour masquer/afficher les sections */
         .hidden {
             display: none !important;
         }
@@ -301,14 +299,12 @@
     <div id="message-box-container"></div>
 
     <script>
-        // References to DOM elements
         const landingPage = document.getElementById('landing-page');
         const authPage = document.getElementById('auth-page');
         const homePage = document.getElementById('home-page');
         const chatPage = document.getElementById('chat-page');
         const newConversationPage = document.getElementById('new-conversation-page');
         const startAdventureButton = document.getElementById('start-adventure-button');
-
         const authTitle = document.getElementById('auth-title');
         const emailInput = document.getElementById('email-input');
         const passwordInput = document.getElementById('password-input');
@@ -317,15 +313,11 @@
         const toggleButton = document.getElementById('toggle-button');
         const authForm = document.getElementById('auth-form');
         const messageBoxContainer = document.getElementById('message-box-container');
-        const authMessage = document.getElementById('auth-message'); // Ensure this ID exists in your HTML
-
-        // HomePage elements
+        const authMessage = document.getElementById('auth-message');
         const chatsTabButton = document.getElementById('chats-tab-button');
         const groupsTabButton = document.getElementById('groups-tab-button');
         const conversationListContainer = document.getElementById('conversation-list');
         const addNewConversationButton = document.getElementById('add-new-conversation-button');
-
-        // ChatConversationPage elements
         const chatContactName = document.getElementById('chat-contact-name');
         const messagesDisplayArea = document.getElementById('messages-display-area');
         const newMessageInput = document.getElementById('new-message-input');
@@ -334,8 +326,6 @@
         const messageInputForm = document.getElementById('message-input-form');
         const messagesEndRef = document.getElementById('messages-end-ref');
         const backToHomeButton = document.getElementById('back-to-home-button');
-
-        // NewConversationPage elements
         const newChatTabButton = document.getElementById('new-chat-tab-button');
         const newGroupTabButton = document.getElementById('new-group-tab-button');
         const createChatForm = document.getElementById('create-chat-form');
@@ -346,82 +336,56 @@
         const groupMembersInput = document.getElementById('group-members-input');
         const groupEndDateInput = document.getElementById('group-end-date-input');
         const backFromNewConversationButton = document.getElementById('back-from-new-conversation-button');
-
-        // Global state variables
-        let currentPage = 'landing'; // 'landing', 'auth', 'home', 'chat', or 'new-conversation'
-        let isRegisterMode = false; // true for registration, false for login
-        let activeTab = 'chats'; // 'chats' or 'groups' for HomePage
-        let activeForm = 'chat'; // 'chat' or 'group' for NewConversationPage
-        let isPriority = false; // Priority status for messages
-
-        // User and conversation data, now managed by the backend
-        // These will be populated after a successful login
-        window.currentUserData = null; // Will contain { email, contacts, conversations, groups }
-        window.currentChatId = null; // ID of the currently open conversation
-        let currentChatContactName = ''; // Name of the contact in the current conversation
-
-        // Starred conversations state (initialized empty, updated dynamically)
+        let currentPage = 'landing'; 
+        let isRegisterMode = false; 
+        let activeTab = 'chats'; 
+        let activeForm = 'chat'; 
+        let isPriority = false;
+        window.currentUserData = null; 
+        window.currentChatId = null;
+        let currentChatContactName = '';
         let starredConversations = new Set();
-
-
         const backendUrl = 'https://essential-9ouy.onrender.com/api'; 
         const socket = io('https://essential-9ouy.onrender.com');
 
-
-        // --- Utility functions ---
-
-        // Function to display a custom message box (replaces alert())
         function showMessageBox(message, type = 'info') {
             const overlay = document.createElement('div');
-            overlay.className = 'message-box-overlay'; // Keep the overlay style if you have one
+            overlay.className = 'message-box-overlay';
             overlay.innerHTML = `
                 <div class="message-box ${type === 'success' ? 'message-success' : 'message-error'}">
                     <p class="text-lg font-semibold">${message}</p>
                     <button onclick="this.closest('.message-box-overlay').remove()">OK</button>
                 </div>
             `;
-            // Ensure messageBoxContainer exists and is visible
             if (messageBoxContainer) {
                 messageBoxContainer.appendChild(overlay);
             } else {
                 console.error("messageBoxContainer not found in DOM.");
-                alert(message); // Fallback if container is not ready
+                alert(message);
             }
         }
-
-
-        // Function to display authentication messages (for login/registration errors or successes)
         function showAuthMessage(message, type = 'info') {
             authMessage.textContent = message;
             authMessage.className = `message-box ${type === 'success' ? 'message-success' : 'message-error'} block`;
             authMessage.classList.remove('hidden');
         }
-
-        // Function to hide authentication messages
         function hideAuthMessage() {
             authMessage.classList.add('hidden');
             authMessage.textContent = '';
         }
-
-        // Function to update the authentication UI (title, button text)
         function updateAuthUI() {
             authTitle.textContent = isRegisterMode ? 'Inscription' : 'Connexion';
             submitButton.textContent = isRegisterMode ? "S'inscrire" : "Se connecter";
             toggleText.textContent = isRegisterMode ? "Déjà un compte ?" : "Pas encore de compte ?";
             toggleButton.textContent = isRegisterMode ? "Se connecter" : "S'inscrire";
         }
-
-        // Function to switch between application pages
         function navigateTo(page, chatId = null, chatName = null) {
             currentPage = page;
-            // Hide all pages
             landingPage.classList.add('hidden');
             authPage.classList.add('hidden');
             homePage.classList.add('hidden');
             chatPage.classList.add('hidden');
             newConversationPage.classList.add('hidden');
-
-            // Display the desired page and update its UI if necessary
             if (currentPage === 'landing') {
                 landingPage.classList.remove('hidden');
             } else if (currentPage === 'auth') {
@@ -429,28 +393,24 @@
                 updateAuthUI();
             } else if (currentPage === 'home') {
                 homePage.classList.remove('hidden');
-                if (window.currentUserData) { // Ensure user data is loaded
-                    updateHomeUI(); // Update the conversation list
+                if (window.currentUserData) {
+                    updateHomeUI();
                 } else {
-                    // If no user data (e.g., refresh without session), redirect to authentication
                     console.warn("No user data, redirecting to authentication.");
                     navigateTo('auth');
                 }
             } else if (currentPage === 'chat') {
                 chatPage.classList.remove('hidden');
-                window.currentChatId = chatId; // Set the ID of the current conversation
+                window.currentChatId = chatId;
                 currentChatContactName = chatName || 'Contact';
                 chatContactName.textContent = currentChatContactName;
-                renderMessages(); // Display messages for this conversation
+                renderMessages();
             } else if (currentPage === 'new-conversation') {
                 newConversationPage.classList.remove('hidden');
                 updateNewConversationUI();
             }
         }
-
-        // Function to update the HomePage UI (tabs and conversation list)
         function updateHomeUI() {
-            // Update tab styles
             if (activeTab === 'chats') {
                 chatsTabButton.classList.add('bg-yellow-400', 'text-purple-800', 'shadow-md');
                 chatsTabButton.classList.remove('text-white', 'text-opacity-80', 'hover:bg-white', 'hover:bg-opacity-10');
@@ -462,30 +422,19 @@
                 chatsTabButton.classList.remove('bg-yellow-400', 'text-purple-800', 'shadow-md');
                 chatsTabButton.classList.add('text-white', 'text-opacity-80', 'hover:bg-white', 'hover:bg-opacity-10');
             }
-
-            // Retrieve conversations from the logged-in user
             const allConversations = window.currentUserData.conversations || [];
-
-            // Update starred status and sort conversations
             const displayConversations = allConversations.map(conv => ({
                 ...conv,
-                isStarred: starredConversations.has(conv.id) || conv.isPriority // Also consider initial priority from backend
+                isStarred: starredConversations.has(conv.id) || conv.isPriority 
             })).sort((a, b) => {
                 if (a.isStarred && !b.isStarred) return -1;
                 if (!a.isStarred && b.isStarred) return 1;
-                // Simple sort by time (needs improvement for actual dates/times)
-                // For a more robust sort by hour/date, a real timestamp property would be needed
-                return 0; // Maintain original order if priority is the same
+                return 0;
             });
-
             const filteredConversations = displayConversations.filter(conv =>
                 (activeTab === 'chats' && !conv.isGroup) || (activeTab === 'groups' && conv.isGroup)
             );
-
-            // Clear the current list
             conversationListContainer.innerHTML = '';
-
-            // Render new conversations
             if (filteredConversations.length === 0) {
                 const noConvDiv = document.createElement('div');
                 noConvDiv.className = 'text-center text-white text-opacity-70 mt-10';
@@ -498,11 +447,9 @@
                         ${conv.isStarred ? 'bg-yellow-400 bg-opacity-20 ring-2 ring-yellow-300' : 'bg-white bg-opacity-10 hover:bg-opacity-20'}
                         shadow-sm mb-3
                     `;
-                    // Add event listener to navigate to chat page
                     conversationDiv.addEventListener('click', () => {
                         navigateTo('chat', conv.id, conv.name);
                     });
-
                     conversationDiv.innerHTML = `
                         <div class="w-12 h-12 bg-purple-700 rounded-full flex items-center justify-center text-xl font-bold mr-4 flex-shrink-0">
                             ${conv.name.charAt(0)}
@@ -537,48 +484,36 @@
                     `;
                     conversationListContainer.appendChild(conversationDiv);
                 });
-
-                // Attach event listeners to new star buttons
                 conversationListContainer.querySelectorAll('.star-button').forEach(button => {
                     button.addEventListener('click', (e) => {
-                        e.stopPropagation(); // Prevent parent div click
+                        e.stopPropagation();
                         const id = button.dataset.id;
                         toggleStar(id);
                     });
                 });
             }
         }
-
-        // Function to toggle the star status of a conversation
         function toggleStar(id) {
             if (starredConversations.has(id)) {
                 starredConversations.delete(id);
             } else {
                 starredConversations.add(id);
             }
-            updateHomeUI(); // Re-render the list to reflect the change
+            updateHomeUI();
         }
-
-        // Functions for ChatConversationPage
         function scrollToBottom() {
             messagesEndRef.scrollIntoView({ behavior: "smooth" });
         }
-
         function renderMessages() {
-            messagesDisplayArea.innerHTML = ''; // Clear existing messages
-
-            // Find the current conversation in user data
+            messagesDisplayArea.innerHTML = '';
             const currentConversation = window.currentUserData.conversations.find(conv => conv.id === window.currentChatId);
-
             if (!currentConversation || currentConversation.messages.length === 0) {
                 const noMessageDiv = document.createElement('div');
                 noMessageDiv.className = 'text-center text-white text-opacity-70 mt-10';
                 noMessageDiv.textContent = `Commencez à discuter avec ${currentChatContactName} !`;
                 messagesDisplayArea.appendChild(noMessageDiv);
             } else {
-                // Copy messages to allow sorting without modifying the original
                 const messagesToDisplay = [...currentConversation.messages];
-
                 messagesToDisplay.forEach(msg => {
                     const messageDiv = document.createElement('div');
                     messageDiv.className = `flex ${msg.sender === 'Moi' ? 'justify-end' : 'justify-start'} mb-3`;
@@ -601,8 +536,6 @@
                         </div>
                     `;
                     messagesDisplayArea.appendChild(messageDiv);
-
-                    // Attach event listener to toggle priority
                     messageDiv.querySelector('.relative').addEventListener('click', (e) => {
                         toggleMessagePriority(window.currentChatId, msg.id);
                     });
@@ -610,72 +543,54 @@
             }
             scrollToBottom();
         }
-
         function handleSendMessage(e) {
             e.preventDefault();
             const text = newMessageInput.value.trim();
             if (text && window.currentChatId) {
                 const newMsg = {
-                    id: Date.now(), // Unique ID for the message
+                    id: Date.now(),
                     text: text,
-                    sender: 'Moi', // Message sent by current user
+                    sender: 'Moi',
                     isPriority: isPriority,
                     timestamp: new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })
                 };
-
-                // Find the current conversation and add the message
                 const currentConversation = window.currentUserData.conversations.find(conv => conv.id === window.currentChatId);
                 if (currentConversation) {
                     if (!currentConversation.messages) {
-                        currentConversation.messages = []; // Ensure messages array exists
+                        currentConversation.messages = [];
                     }
                     currentConversation.messages.push(newMsg);
-                    currentConversation.lastMessage = newMsg.text; // Update last message
-                    currentConversation.time = newMsg.timestamp; // Update last message time
-
-                    // **** IMPORTANT: Send this update to the backend ****
-                    // This is a crucial step to persist messages and last activity.
-                    // For now, I will leave this part as a TODO,
-                    // as it would require a new PUT route on the backend to
-                    // update a specific conversation with its messages.
-                    // For example: fetch(`${backendUrl}/conversations/${window.currentChatId}`, { method: 'PUT', body: JSON.stringify(currentConversation) });
-                    // For now, messages will not be persisted after a refresh.
+                    currentConversation.lastMessage = newMsg.text;
+                    currentConversation.time = newMsg.timestamp; 
                     updateUserDataOnBackend(window.currentUserData.email, window.currentUserData.conversations);
-
                 } else {
                     console.error("Current conversation not found for message addition.");
                     return;
                 }
-
-                newMessageInput.value = ''; // Clear input
-                isPriority = false; // Reset priority button
+                newMessageInput.value = ''; 
+                isPriority = false; 
                 priorityToggleButton.classList.remove('bg-yellow-400', 'text-purple-800', 'shadow-md');
                 priorityToggleButton.classList.add('bg-white', 'bg-opacity-20', 'text-white', 'text-opacity-70', 'hover:bg-opacity-30');
-                renderMessages(); // Re-render messages
-                updateHomeUI(); // Update conversation list (for lastMessage/time)
+                renderMessages(); 
+                updateHomeUI();
             }
         }
-
         function toggleMessagePriority(chatId, messageId) {
             const currentConversation = window.currentUserData.conversations.find(conv => conv.id === chatId);
             if (currentConversation) {
                 currentConversation.messages = currentConversation.messages.map(msg =>
                     msg.id === messageId ? { ...msg, isPriority: !msg.isPriority } : msg
                 );
-                // Persist the change to the backend (same as for sending message)
                 updateUserDataOnBackend(window.currentUserData.email, window.currentUserData.conversations);
             }
-            renderMessages(); // Re-render messages to reflect the change
+            renderMessages();
         }
-
-        // Function to update the NewConversationPage UI (form tabs)
         function updateNewConversationUI() {
             if (activeForm === 'chat') {
                 newChatTabButton.classList.add('bg-yellow-400', 'text-purple-800', 'shadow-md');
                 newChatTabButton.classList.remove('text-white', 'text-opacity-80', 'hover:bg-white', 'hover:bg-opacity-10');
                 newGroupTabButton.classList.remove('bg-yellow-400', 'text-purple-800', 'shadow-md');
                 newGroupTabButton.classList.add('text-white', 'text-opacity-80', 'hover:bg-white', 'hover:bg-opacity-10');
-
                 createChatForm.classList.remove('hidden');
                 createGroupForm.classList.add('hidden');
             } else {
@@ -683,13 +598,10 @@
                 newGroupTabButton.classList.remove('text-white', 'text-opacity-80', 'hover:bg-white', 'hover:bg-opacity-10');
                 newChatTabButton.classList.remove('bg-yellow-400', 'text-purple-800', 'shadow-md');
                 newChatTabButton.classList.add('text-white', 'text-opacity-80', 'hover:bg-white', 'hover:bg-opacity-10');
-
                 createGroupForm.classList.remove('hidden');
                 createChatForm.classList.add('hidden');
             }
         }
-
-        // Generic function to update user data on the backend
         async function updateUserDataOnBackend(email, conversations) {
             try {
                 const response = await fetch(`${backendUrl}/user/${encodeURIComponent(email)}`, {
@@ -705,26 +617,17 @@
                 console.error('Network error updating user data:', error);
             }
         }
-
-
-        // --- Event Handlers ---
-
-        // Handle authentication form submission (login/registration)
         authForm.addEventListener('submit', async (event) => {
             event.preventDefault();
             hideAuthMessage();
-
             const email = emailInput.value.trim();
             const password = passwordInput.value.trim();
-
             if (!email || !password) {
                 showAuthMessage('Veuillez remplir tous les champs.', 'error');
                 return;
             }
-
             const endpoint = isRegisterMode ? `${backendUrl}/register` : `${backendUrl}/login`;
             const method = 'POST';
-
             try {
                 const response = await fetch(endpoint, {
                     method: method,
@@ -733,38 +636,29 @@
                     },
                     body: JSON.stringify({ email, password }),
                 });
-
                 const result = await response.json();
-
                 if (response.ok) {
                     showAuthMessage(result.message, 'success');
                     authForm.reset();
-
-                    if (!isRegisterMode) { // If it's a successful login
-                        // Store the logged-in user's email
-                        // This is crucial because the backend returns the email after login to identify the user
+                    if (!isRegisterMode) {
                         window.currentUserEmail = result.userEmail;
-                        // Retrieve all user data (contacts, conversations)
                         fetch(`${backendUrl}/user/${encodeURIComponent(window.currentUserEmail)}`)
                             .then(res => {
                                 if (!res.ok) throw new Error('Failed to load user data');
                                 return res.json();
                             })
                             .then(userData => {
-                                window.currentUserData = userData; // Store user data globally
-                                // Re-initialize starred conversations based on fetched data
+                                window.currentUserData = userData;
                                 starredConversations = new Set(userData.conversations.filter(c => c.isPriority).map(c => c.id));
-                                navigateTo('home'); // Navigate to home page
+                                navigateTo('home');
                             })
                             .catch((error) => {
                                 console.error('Error loading user data:', error);
                                 showAuthMessage("Impossible de charger les données du compte.", "error");
                             });
-                    } else { // If it's a successful registration
-                        // After registration, we can automatically navigate to the login page
-                        isRegisterMode = false; // Switch to login mode
-                        updateAuthUI(); // Update authentication UI
-                        // showMessageBox("Inscription réussie ! Vous pouvez maintenant vous connecter.");
+                    } else {
+                        isRegisterMode = false; 
+                        updateAuthUI(); 
                     }
                 } else {
                     showAuthMessage(`Erreur: ${result.error || 'Une erreur inconnue est survenue.'}`, 'error');
@@ -774,14 +668,10 @@
                 showAuthMessage('Erreur de connexion au serveur. Assurez-vous qu\'il est en cours d\'exécution.', 'error');
             }
         });
-
-
-        // Handle new chat creation
         createChatForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const contactName = chatContactNameInput.value.trim();
             const contactIdentifier = chatContactIdentifierInput.value.trim();
-
             if (contactName && contactIdentifier) {
                 try {
                     const response = await fetch(`${backendUrl}/chats`, {
@@ -790,19 +680,16 @@
                             'Content-Type': 'application/json',
                         },
                         body: JSON.stringify({
-                            userId: window.currentUserData.email, // Use the logged-in user's email
+                            userId: window.currentUserData.email,
                             name: contactName,
                             identifier: contactIdentifier,
                         }),
                     });
-
                     const result = await response.json();
-
                     if (response.ok) {
                         showMessageBox(`Chat avec ${contactName} créé avec succès !`, 'success');
-                        // Add the new conversation to the user's local data
                         window.currentUserData.conversations.push(result.newChat);
-                        updateHomeUI(); // Update the conversation list display
+                        updateHomeUI();
                         navigateTo('home');
                     } else {
                         showMessageBox(`Erreur lors de la création du chat : ${result.error || 'Erreur inconnue'}`, 'error');
@@ -811,30 +698,23 @@
                     console.error('Network error during chat creation:', error);
                     showMessageBox('Impossible de créer le chat. Erreur de connexion au serveur.', 'error');
                 }
-
                 chatContactNameInput.value = '';
                 chatContactIdentifierInput.value = '';
             } else {
                 showMessageBox("Veuillez entrer un nom et un identifiant pour le contact.");
             }
         });
-
-        // Handle new group creation
         createGroupForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const groupName = groupNameInput.value.trim();
             const groupMembers = groupMembersInput.value.trim();
             const groupEndDate = groupEndDateInput.value.trim();
-
             if (groupName && groupMembers && groupEndDate) {
-                // Convert member string to array
                 const membersArray = groupMembers.split(',').map(member => member.trim()).filter(member => member !== '');
-
                 if (membersArray.length === 0) {
                     showMessageBox("Veuillez spécifier au moins un membre pour le groupe.");
                     return;
                 }
-
                 try {
                     const response = await fetch(`${backendUrl}/groups`, {
                         method: 'POST',
@@ -842,20 +722,17 @@
                             'Content-Type': 'application/json',
                         },
                         body: JSON.stringify({
-                            userId: window.currentUserData.email, // Use the logged-in user's email
+                            userId: window.currentUserData.email,
                             name: groupName,
                             members: membersArray,
                             endDate: groupEndDate,
                         }),
                     });
-
                     const result = await response.json();
-
                     if (response.ok) {
                         showMessageBox(`Groupe "${groupName}" créé avec succès !`, 'success');
-                        // Add the new group to the user's local data
                         window.currentUserData.conversations.push(result.newGroup);
-                        updateHomeUI(); // Update the conversation list display
+                        updateHomeUI();
                         navigateTo('home');
                     } else {
                         showMessageBox(`Erreur lors de la création du groupe : ${result.error || 'Erreur inconnue'}`, 'error');
@@ -864,7 +741,6 @@
                     console.error('Network error during group creation:', error);
                     showMessageBox('Impossible de créer le groupe. Erreur de connexion au serveur.', 'error');
                 }
-
                 groupNameInput.value = '';
                 groupMembersInput.value = '';
                 groupEndDateInput.value = '';
@@ -872,44 +748,28 @@
                 showMessageBox("Veuillez remplir tous les champs du groupe.");
             }
         });
-
-
-        // --- UI Element Event Listeners ---
-
-        // Handle click on toggle button (Login/Register)
         toggleButton.addEventListener('click', () => {
             isRegisterMode = !isRegisterMode;
             updateAuthUI();
             emailInput.value = '';
             passwordInput.value = '';
-            hideAuthMessage(); // Hide message when switching mode
+            hideAuthMessage(); 
         });
-
-        // Handle click on "Start Adventure!" button
         startAdventureButton.addEventListener('click', () => {
             navigateTo('auth');
         });
-
-        // Handle clicks on HomePage tabs
         chatsTabButton.addEventListener('click', () => {
             activeTab = 'chats';
             updateHomeUI();
         });
-
         groupsTabButton.addEventListener('click', () => {
             activeTab = 'groups';
             updateHomeUI();
         });
-
-        // Handle click on '+' button to add a new conversation
         addNewConversationButton.addEventListener('click', () => {
             navigateTo('new-conversation');
         });
-
-        // Handle message submission on chat page
         messageInputForm.addEventListener('submit', handleSendMessage);
-
-        // Handle click on message priority button
         priorityToggleButton.addEventListener('click', () => {
             isPriority = !isPriority;
             if (isPriority) {
@@ -920,33 +780,23 @@
                 priorityToggleButton.classList.add('bg-white', 'bg-opacity-20', 'text-white', 'text-opacity-70', 'hover:bg-opacity-30');
             }
         });
-
-        // Handle click on back button from chat page
         backToHomeButton.addEventListener('click', () => {
             navigateTo('home');
         });
-
-        // Handle clicks on New Chat/New Group tabs
         newChatTabButton.addEventListener('click', () => {
             activeForm = 'chat';
             updateNewConversationUI();
         });
-
         newGroupTabButton.addEventListener('click', () => {
             activeForm = 'group';
             updateNewConversationUI();
         });
-
-        // Handle back button from new conversation page
         backFromNewConversationButton.addEventListener('click', () => {
             navigateTo('home');
         });
-
-        // Initial UI update when the page loads
         document.addEventListener('DOMContentLoaded', () => {
-            navigateTo('landing'); // Display the landing page by default
+            navigateTo('landing');
         });
-
     </script>
 </body>
 </html>
