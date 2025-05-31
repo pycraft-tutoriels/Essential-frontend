@@ -267,6 +267,7 @@
         const chatPage = document.getElementById('chat-page');
         
         const loginTabButton = document.getElementById('login-tab-button');
+        const getStartedButton = document.getElementById('get-started-button');
         const registerTabButton = document.getElementById('register-tab-button');
         
         const messageBox = document.getElementById('message-box');
@@ -798,9 +799,10 @@
         chatInfoCloseButton.addEventListener('click', () => {
             chatInfoModal.classList.add('hidden');
         });
-        
-        // Initialisation de l'application
-        navigateTo('auth');
+
+        getStartedButton.addEventListener('click', () => {
+            navigateTo('auth');
+        });
     </script>
 </body>
 </html>
