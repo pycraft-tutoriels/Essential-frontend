@@ -754,6 +754,8 @@
                                 // Re-initialize starred conversations based on fetched data
                                 starredConversations = new Set(userData.conversations.filter(c => c.isPriority).map(c => c.id));
                                 navigateTo('home'); // Navigate to home page
+                                if (window.userPollingInterval) clearInterval(window.userPollingInterval);
+                                window.userPollingInterval = setInterval(refreshUserData, 5000); // toutes les 5 secondes
                             })
                             .catch((error) => {
                                 console.error('Error loading user data:', error);
@@ -868,6 +870,20 @@
                 showMessageBox("Veuillez remplir tous les champs du groupe.");
             }
         });
+
+        async function refreshUserData() {
+            if (!window.currentUserEmail) return;
+            try {
+                const res = await fetch(`${backendUrl}/user/${encodeURIComponent(window.currentUserEmail)}`);
+                if (!res.ok) throw new Error('Erreur lors du chargement des données utilisateur');
+                const userData = await res.json();
+                window.currentUserData = userData;
+                // Mets à jour l’UI ici si besoin, par exemple :
+                updateHomeUI && updateHomeUI();
+            } catch (err) {
+                console.error('Erreur lors du polling des données utilisateur:', err);
+            }
+        }
 
 
         // --- UI Element Event Listeners ---
