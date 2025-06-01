@@ -246,9 +246,9 @@
                         required
                     />
                     <input
-                        type="text"
+                        type="email"
                         id="chat-contact-identifier-input"
-                        placeholder="Numéro de téléphone ou ID du contact"
+                        placeholder="E-mail du contact"
                         class="w-full p-4 rounded-xl bg-white bg-opacity-20 border border-white border-opacity-30 text-white placeholder-white placeholder-opacity-70 focus:outline-none focus:ring-2 focus:ring-yellow-300 transition duration-200"
                         required
                     />
@@ -775,13 +775,12 @@
         });
 
 
-        // Handle new chat creation
         createChatForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const contactName = chatContactNameInput.value.trim();
-            const contactIdentifier = chatContactIdentifierInput.value.trim();
+            const contactEmail = chatContactIdentifierInput.value.trim(); // <-- c'est l'e-mail maintenant
 
-            if (contactName && contactIdentifier) {
+            if (contactName && contactEmail) {
                 try {
                     const response = await fetch(`${backendUrl}/chats`, {
                         method: 'POST',
@@ -789,32 +788,30 @@
                             'Content-Type': 'application/json',
                         },
                         body: JSON.stringify({
-                            userId: window.currentUserData.email, // Use the logged-in user's email
+                            userId: window.currentUserData.email,
                             name: contactName,
-                            identifier: contactIdentifier,
+                            contactEmail: contactEmail, // <-- envoie l'e-mail
                         }),
                     });
 
                     const result = await response.json();
 
                     if (response.ok) {
-                        showMessageBox(`Chat avec ${contactName} créé avec succès !`, 'success');
-                        // Add the new conversation to the user's local data
+                        showMessageBox(`Chat avec ${contactName} ajouté !`, 'success');
                         window.currentUserData.conversations.push(result.newChat);
-                        updateHomeUI(); // Update the conversation list display
+                        updateHomeUI();
                         navigateTo('home');
                     } else {
-                        showMessageBox(`Erreur lors de la création du chat : ${result.error || 'Erreur inconnue'}`, 'error');
+                        showMessageBox(`Erreur : ${result.error || 'Erreur inconnue'}`, 'error');
                     }
                 } catch (error) {
-                    console.error('Network error during chat creation:', error);
-                    showMessageBox('Impossible de créer le chat. Erreur de connexion au serveur.', 'error');
+                    showMessageBox('Erreur réseau.', 'error');
                 }
 
                 chatContactNameInput.value = '';
                 chatContactIdentifierInput.value = '';
             } else {
-                showMessageBox("Veuillez entrer un nom et un identifiant pour le contact.");
+                showMessageBox("Veuillez entrer un nom et un e-mail.");
             }
         });
 
