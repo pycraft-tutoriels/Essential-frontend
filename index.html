@@ -610,17 +610,26 @@
             scrollToBottom();
         }
 
-        function handleSendMessage(e) {
+        async function handleSendMessage(e) {
             e.preventDefault();
             const text = newMessageInput.value.trim();
             if (text && window.currentChatId) {
                 const newMsg = {
-                    id: Date.now(), // Unique ID for the message
+                    id: Date.now(),
                     text: text,
-                    sender: 'Moi', // Message sent by current user
+                    sender: window.currentUserData.email, // Utilise l'email pour savoir qui a envoyé
                     isPriority: isPriority,
                     timestamp: new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })
                 };
+
+                await fetch(`${backendUrl}/messages`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        conversationId: window.currentChatId,
+                        message: newMsg
+                    })
+                });
 
                 // Find the current conversation and add the message
                 const currentConversation = window.currentUserData.conversations.find(conv => conv.id === window.currentChatId);
