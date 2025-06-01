@@ -136,7 +136,7 @@
             </p>
         </div>
 
-        <div id="home-page" class="hidden bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg rounded-3xl shadow-2xl w-full max-w-md flex flex-col h-[90vh] overflow-hidden border border-white border-opacity-20">
+        <div id="home-page" class="hidden bg-gray-900 bg-opacity-80 backdrop-filter backdrop-blur-lg rounded-3xl shadow-2xl w-full max-w-md flex flex-col h-[90vh] overflow-hidden border border-white border-opacity-20">
             <div class="bg-white bg-opacity-15 p-4 rounded-t-3xl shadow-md flex justify-between items-center">
                 <h1 class="text-2xl font-bold text-white">Essential</h1>
                 <button id="add-new-conversation-button" class="bg-yellow-400 text-purple-800 p-2 rounded-full shadow-md hover:bg-yellow-300 transition-all duration-200 focus:outline-none">
@@ -173,7 +173,7 @@
             </div>
         </div>
 
-        <div id="chat-page" class="hidden bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg rounded-3xl shadow-2xl w-full max-w-md flex flex-col h-[90vh] overflow-hidden border border-white border-opacity-20">
+        <div id="chat-page" class="hidden bg-gray-900 bg-opacity-80 backdrop-filter backdrop-blur-lg rounded-3xl shadow-2xl w-full max-w-md flex flex-col h-[90vh] overflow-hidden border border-white border-opacity-20">
             <div class="bg-white bg-opacity-15 p-4 rounded-t-3xl shadow-md flex justify-between items-center">
                 <button id="back-to-home-button" class="text-white text-opacity-80 hover:text-white transition-colors duration-200 focus:outline-none">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -216,7 +216,7 @@
             </form>
         </div>
 
-        <div id="new-conversation-page" class="hidden bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg rounded-3xl shadow-2xl w-full max-w-md flex flex-col h-[90vh] overflow-hidden border border-white border-opacity-20">
+        <div id="new-conversation-page" class="hidden bg-gray-900 bg-opacity-80 backdrop-filter backdrop-blur-lg rounded-3xl shadow-2xl w-full max-w-md flex flex-col h-[90vh] overflow-hidden border border-white border-opacity-20">
             <div class="bg-white bg-opacity-15 p-4 rounded-t-3xl shadow-md flex justify-between items-center">
                 <h1 class="text-2xl font-bold text-white">Nouvelle Conversation</h1>
                 <button id="back-from-new-conversation-button" class="text-white text-opacity-80 hover:text-white transition-colors duration-200 focus:outline-none">
@@ -640,37 +640,6 @@
                 isPriority = false; // Reset du bouton priorité
                 priorityToggleButton.classList.remove('bg-yellow-400', 'text-purple-800', 'shadow-md');
                 priorityToggleButton.classList.add('bg-white', 'bg-opacity-20', 'text-white', 'text-opacity-70', 'hover:bg-opacity-30');
-
-                // Find the current conversation and add the message
-                const currentConversation = window.currentUserData.conversations.find(conv => conv.id === window.currentChatId);
-                if (currentConversation) {
-                    if (!currentConversation.messages) {
-                        currentConversation.messages = []; // Ensure messages array exists
-                    }
-                    currentConversation.messages.push(newMsg);
-                    currentConversation.lastMessage = newMsg.text; // Update last message
-                    currentConversation.time = newMsg.timestamp; // Update last message time
-
-                    // **** IMPORTANT: Send this update to the backend ****
-                    // This is a crucial step to persist messages and last activity.
-                    // For now, I will leave this part as a TODO,
-                    // as it would require a new PUT route on the backend to
-                    // update a specific conversation with its messages.
-                    // For example: fetch(`${backendUrl}/conversations/${window.currentChatId}`, { method: 'PUT', body: JSON.stringify(currentConversation) });
-                    // For now, messages will not be persisted after a refresh.
-                    updateUserDataOnBackend(window.currentUserData.email, window.currentUserData.conversations);
-
-                } else {
-                    console.error("Current conversation not found for message addition.");
-                    return;
-                }
-
-                newMessageInput.value = ''; // Clear input
-                isPriority = false; // Reset priority button
-                priorityToggleButton.classList.remove('bg-yellow-400', 'text-purple-800', 'shadow-md');
-                priorityToggleButton.classList.add('bg-white', 'bg-opacity-20', 'text-white', 'text-opacity-70', 'hover:bg-opacity-30');
-                renderMessages(); // Re-render messages
-                updateHomeUI(); // Update conversation list (for lastMessage/time)
             }
         }
 
