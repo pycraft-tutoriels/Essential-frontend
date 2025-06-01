@@ -631,6 +631,16 @@
                     })
                 });
 
+                // --- SUPPRIME tout ce qui suit jusqu'à la fin de la fonction et REMPLACE par : ---
+                await refreshUserData(); // Recharge les données utilisateur depuis le backend
+                renderMessages();        // Affiche les messages à jour
+                updateHomeUI();          // Met à jour la liste des conversations
+
+                newMessageInput.value = ''; // Vide le champ
+                isPriority = false; // Reset du bouton priorité
+                priorityToggleButton.classList.remove('bg-yellow-400', 'text-purple-800', 'shadow-md');
+                priorityToggleButton.classList.add('bg-white', 'bg-opacity-20', 'text-white', 'text-opacity-70', 'hover:bg-opacity-30');
+
                 // Find the current conversation and add the message
                 const currentConversation = window.currentUserData.conversations.find(conv => conv.id === window.currentChatId);
                 if (currentConversation) {
